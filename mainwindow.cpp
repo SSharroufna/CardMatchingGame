@@ -7,6 +7,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    //Dialog to enter number of players
+    numPlayers = new NumPlayersDialog();
+    numPlayers->exec();
+
     // Setting up the graphics view and scene
     QGraphicsView *view = new QGraphicsView(this);
     scene = new QGraphicsScene(this);

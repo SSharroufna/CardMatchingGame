@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "numplayersdialog.h"
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -28,5 +29,6 @@ private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
     QVector<QGraphicsPixmapItem*> cards;
+    NumPlayersDialog *numPlayers;
 };
 #endif // MAINWINDOW_H
