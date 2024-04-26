@@ -28,6 +28,12 @@ MainWindow::MainWindow(QWidget *parent)
     // A QVector<QPixmap> containing card images
     QVector<QPixmap> cardImages;
 
+    // Load a single card image
+    QPixmap cardImage("Users/Download/Card1.png");
+
+    // Add the single card image to the QVector<QPixmap>
+    cardImages.append(cardImage);
+
     // Populate cardImages
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 2; ++j) {
