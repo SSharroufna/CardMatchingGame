@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "numplayersdialog.h"
+#include "playernamesdialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,6 +12,11 @@ MainWindow::MainWindow(QWidget *parent)
     //Dialog to enter number of players
     numPlayers = new NumPlayersDialog();
     numPlayers->exec();
+
+    qDebug() << numPlayers->getNumPlayers();
+
+    PlayerNamesDialog playerNamesDialog(this, numPlayers->getNumPlayers());
+    playerNamesDialog.exec();
 
     // Setting up the graphics view and scene
     QGraphicsView *view = new QGraphicsView(this);

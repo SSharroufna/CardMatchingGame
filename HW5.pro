@@ -12,16 +12,19 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     numplayersdialog.cpp \
-    player.cpp
+    player.cpp \
+    playernamesdialog.cpp
 
 HEADERS += \
     mainwindow.h \
     numplayersdialog.h \
-    player.h
+    player.h \
+    playernamesdialog.h
 
 FORMS += \
     mainwindow.ui \
-    numplayersdialog.ui
+    numplayersdialog.ui \
+    playernamesdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

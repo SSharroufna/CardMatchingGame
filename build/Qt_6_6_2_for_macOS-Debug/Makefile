@@ -55,14 +55,18 @@ OBJECTS_DIR   = ./
 SOURCES       = ../../main.cpp \
 		../../mainwindow.cpp \
 		../../numplayersdialog.cpp \
-		../../player.cpp moc_mainwindow.cpp \
-		moc_numplayersdialog.cpp
+		../../player.cpp \
+		../../playernamesdialog.cpp moc_mainwindow.cpp \
+		moc_numplayersdialog.cpp \
+		moc_playernamesdialog.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		numplayersdialog.o \
 		player.o \
+		playernamesdialog.o \
 		moc_mainwindow.o \
-		moc_numplayersdialog.o
+		moc_numplayersdialog.o \
+		moc_playernamesdialog.o
 DIST          = /Qt/6.6.2/macos/mkspecs/features/spec_pre.prf \
 		/Qt/6.6.2/macos/mkspecs/features/device_config.prf \
 		/Qt/6.6.2/macos/mkspecs/common/unix.conf \
@@ -351,6 +355,7 @@ DIST          = /Qt/6.6.2/macos/mkspecs/features/spec_pre.prf \
 		/Qt/6.6.2/macos/mkspecs/features/qt_config.prf \
 		/Qt/6.6.2/macos/mkspecs/macx-clang/qmake.conf \
 		/Qt/6.6.2/macos/mkspecs/features/spec_post.prf \
+		../../.qmake.stash \
 		/Qt/6.6.2/macos/mkspecs/features/exclusive_builds.prf \
 		/Qt/6.6.2/macos/mkspecs/features/mac/sdk.prf \
 		/Qt/6.6.2/macos/mkspecs/features/toolchain.prf \
@@ -382,10 +387,12 @@ DIST          = /Qt/6.6.2/macos/mkspecs/features/spec_pre.prf \
 		/Qt/6.6.2/macos/mkspecs/features/lex.prf \
 		../../../../HW5.pro ../../mainwindow.h \
 		../../numplayersdialog.h \
-		../../player.h ../../main.cpp \
+		../../player.h \
+		../../playernamesdialog.h ../../main.cpp \
 		../../mainwindow.cpp \
 		../../numplayersdialog.cpp \
-		../../player.cpp
+		../../player.cpp \
+		../../playernamesdialog.cpp
 QMAKE_TARGET  = HW5
 DESTDIR       = 
 TARGET        = HW5.app/Contents/MacOS/HW5
@@ -394,7 +401,7 @@ TARGET        = HW5.app/Contents/MacOS/HW5
 EXPORT_QMAKE_MAC_SDK = macosx
 EXPORT_QMAKE_MAC_SDK_VERSION = 14.4
 EXPORT_QMAKE_XCODE_DEVELOPER_PATH = /Library/Developer/CommandLineTools
-EXPORT__QMAKE_STASH_ = 
+EXPORT__QMAKE_STASH_ = /Users/liliagarcia/CardMatchingGame/build/Qt_6_6_2_for_macOS-Debug/.qmake.stash
 EXPORT_VALID_ARCHS = x86_64 arm64
 EXPORT_DEFAULT_ARCHS = x86_64
 EXPORT_ARCHS = $(filter $(EXPORT_VALID_ARCHS), $(if $(ARCHS), $(ARCHS), $(if $(EXPORT_DEFAULT_ARCHS), $(EXPORT_DEFAULT_ARCHS), $(EXPORT_VALID_ARCHS))))
@@ -406,7 +413,7 @@ include /Users/liliagarcia/Qt/6.6.2/macos/mkspecs/features/mac/sdk.mk
 first: all
 ####### Build rules
 
-HW5.app/Contents/MacOS/HW5: ui_mainwindow.h ui_numplayersdialog.h $(OBJECTS)  
+HW5.app/Contents/MacOS/HW5: ui_mainwindow.h ui_numplayersdialog.h ui_playernamesdialog.h $(OBJECTS)  
 	@test -d HW5.app/Contents/MacOS/ || mkdir -p HW5.app/Contents/MacOS/
 	$(LINK) $(LFLAGS) -o $(TARGET)  $(OBJECTS) $(OBJCOMP) $(LIBS)
 
@@ -698,6 +705,7 @@ Makefile: ../../HW5.pro ../../../Qt/6.6.2/macos/mkspecs/features/spec_pre.prf \
 		../../../Qt/6.6.2/macos/mkspecs/features/qt_config.prf \
 		../../../Qt/6.6.2/macos/mkspecs/macx-clang/qmake.conf \
 		../../../Qt/6.6.2/macos/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../Qt/6.6.2/macos/mkspecs/features/exclusive_builds.prf \
 		../../../Qt/6.6.2/macos/mkspecs/features/mac/sdk.prf \
 		../../../Qt/6.6.2/macos/mkspecs/features/toolchain.prf \
@@ -1020,6 +1028,7 @@ Makefile: ../../HW5.pro ../../../Qt/6.6.2/macos/mkspecs/features/spec_pre.prf \
 ../../../Qt/6.6.2/macos/mkspecs/features/qt_config.prf:
 ../../../Qt/6.6.2/macos/mkspecs/macx-clang/qmake.conf:
 ../../../Qt/6.6.2/macos/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../Qt/6.6.2/macos/mkspecs/features/exclusive_builds.prf:
 ../../../Qt/6.6.2/macos/mkspecs/features/mac/sdk.prf:
 ../../../Qt/6.6.2/macos/mkspecs/features/toolchain.prf:
@@ -1077,9 +1086,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../mainwindow.h ../../numplayersdialog.h ../../player.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../main.cpp ../../mainwindow.cpp ../../numplayersdialog.cpp ../../player.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../mainwindow.ui ../../numplayersdialog.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../../mainwindow.h ../../numplayersdialog.h ../../player.h ../../playernamesdialog.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../main.cpp ../../mainwindow.cpp ../../numplayersdialog.cpp ../../player.cpp ../../playernamesdialog.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../mainwindow.ui ../../numplayersdialog.ui ../../playernamesdialog.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1089,6 +1098,7 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) -r HW5.app
+	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
@@ -1107,10 +1117,19 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_numplayersdialog.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_numplayersdialog.cpp moc_playernamesdialog.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_numplayersdialog.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_numplayersdialog.cpp moc_playernamesdialog.cpp
 moc_mainwindow.cpp: ../../mainwindow.h \
+		../../numplayersdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QDialog \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QTextEdit \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtextedit.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QGraphicsScene \
@@ -1140,13 +1159,23 @@ moc_numplayersdialog.cpp: ../../numplayersdialog.h \
 		../../../Qt/6.6.2/macos/libexec/moc
 	/Users/liliagarcia/Qt/6.6.2/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=15 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/liliagarcia/Qt/6.6.2/macos/mkspecs/macx-clang -I/Users/liliagarcia/CardMatchingGame -I/Users/liliagarcia/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers -I/Users/liliagarcia/Qt/6.6.2/macos/lib/QtGui.framework/Headers -I/Users/liliagarcia/Qt/6.6.2/macos/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/Users/liliagarcia/Qt/6.6.2/macos/lib ../../numplayersdialog.h -o moc_numplayersdialog.cpp
 
+moc_playernamesdialog.cpp: ../../playernamesdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QDialog \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QTextEdit \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtextedit.h \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QVector \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qvector.h \
+		../../../Qt/6.6.2/macos/libexec/moc
+	/Users/liliagarcia/Qt/6.6.2/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=15 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/liliagarcia/Qt/6.6.2/macos/mkspecs/macx-clang -I/Users/liliagarcia/CardMatchingGame -I/Users/liliagarcia/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers -I/Users/liliagarcia/Qt/6.6.2/macos/lib/QtGui.framework/Headers -I/Users/liliagarcia/Qt/6.6.2/macos/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/Users/liliagarcia/Qt/6.6.2/macos/lib ../../playernamesdialog.h -o moc_playernamesdialog.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h ui_numplayersdialog.h
+compiler_uic_make_all: ui_mainwindow.h ui_numplayersdialog.h ui_playernamesdialog.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h ui_numplayersdialog.h
+	-$(DEL_FILE) ui_mainwindow.h ui_numplayersdialog.h ui_playernamesdialog.h
 ui_mainwindow.h: ../../mainwindow.ui \
 		../../../Qt/6.6.2/macos/libexec/uic
 	/Users/liliagarcia/Qt/6.6.2/macos/libexec/uic ../../mainwindow.ui -o ui_mainwindow.h
@@ -1154,6 +1183,10 @@ ui_mainwindow.h: ../../mainwindow.ui \
 ui_numplayersdialog.h: ../../numplayersdialog.ui \
 		../../../Qt/6.6.2/macos/libexec/uic
 	/Users/liliagarcia/Qt/6.6.2/macos/libexec/uic ../../numplayersdialog.ui -o ui_numplayersdialog.h
+
+ui_playernamesdialog.h: ../../playernamesdialog.ui \
+		../../../Qt/6.6.2/macos/libexec/uic
+	/Users/liliagarcia/Qt/6.6.2/macos/libexec/uic ../../playernamesdialog.ui -o ui_playernamesdialog.h
 
 compiler_rez_source_make_all:
 compiler_rez_source_clean:
@@ -1168,6 +1201,15 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 main.o: ../../main.cpp ../../mainwindow.h \
+		../../numplayersdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QDialog \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QTextEdit \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtextedit.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QGraphicsScene \
@@ -1187,6 +1229,15 @@ main.o: ../../main.cpp ../../mainwindow.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
 
 mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
+		../../numplayersdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QDialog \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QTextEdit \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtextedit.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QGraphicsScene \
@@ -1218,16 +1269,29 @@ numplayersdialog.o: ../../numplayersdialog.cpp ../../numplayersdialog.h \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qdebug.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o numplayersdialog.o ../../numplayersdialog.cpp
 
-player.o: ../../player.cpp ../../player.h \
-		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QString \
-		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstring.h
+player.o: ../../player.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o player.o ../../player.cpp
+
+playernamesdialog.o: ../../playernamesdialog.cpp ../../playernamesdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QDialog \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QTextEdit \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtextedit.h \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QVector \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qvector.h \
+		ui_playernamesdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QDebug \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qdebug.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o playernamesdialog.o ../../playernamesdialog.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
 
 moc_numplayersdialog.o: moc_numplayersdialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_numplayersdialog.o moc_numplayersdialog.cpp
+
+moc_playernamesdialog.o: moc_playernamesdialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_playernamesdialog.o moc_playernamesdialog.cpp
 
 ####### Install
 

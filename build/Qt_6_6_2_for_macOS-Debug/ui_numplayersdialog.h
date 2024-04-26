@@ -33,12 +33,16 @@ public:
         NumPlayersDialog->resize(400, 300);
         buttonBox = new QDialogButtonBox(NumPlayersDialog);
         buttonBox->setObjectName("buttonBox");
-        buttonBox->setGeometry(QRect(120, 240, 161, 32));
+        buttonBox->setGeometry(QRect(120, 230, 161, 32));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         spinBox = new QSpinBox(NumPlayersDialog);
         spinBox->setObjectName("spinBox");
         spinBox->setGeometry(QRect(170, 120, 61, 41));
+        QFont font;
+        font.setPointSize(18);
+        spinBox->setFont(font);
+        spinBox->setAlignment(Qt::AlignCenter);
         label = new QLabel(NumPlayersDialog);
         label->setObjectName("label");
         label->setGeometry(QRect(110, 70, 181, 20));
