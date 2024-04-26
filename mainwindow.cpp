@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "numplayersdialog.h"
 #include "playernamesdialog.h"
+#include "difficultydialog.h"
 #include <QString>
 #include <QDebug>
 
@@ -12,15 +13,16 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    //Dialog to enter number of players
-    numPlayers = new NumPlayersDialog();
-    numPlayers->exec();
 
-    qDebug() << numPlayers->getNumPlayers();
+    //Dialog to enter number of players
+    NumPlayersDialog numPlayers;
+    numPlayers.exec();
+
 
     //Dialog for players to input names
-    PlayerNamesDialog playerNamesDialog(this, numPlayers->getNumPlayers());
+    PlayerNamesDialog playerNamesDialog(this, numPlayers.getNumPlayers());
     playerNamesDialog.exec();
+
 
     //Initialize players and store them in vector
     for (QString name : playerNamesDialog.getPlayers()){
@@ -28,6 +30,12 @@ MainWindow::MainWindow(QWidget *parent)
         qDebug() << "Player" << name << "was made";
         players.append(player);
     }
+
+    //Dialog for game difficulty
+    DifficultyDialog diffDialog;
+    diffDialog.exec();
+
+
 
     // // Setting up the graphics view and scene
     // scene = new QGraphicsScene(this);

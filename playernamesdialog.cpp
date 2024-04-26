@@ -3,12 +3,18 @@
 #include <QDebug>
 #include <QLabel>
 
+
 PlayerNamesDialog::PlayerNamesDialog(QWidget *parent, int numOfPlayers)
     : QDialog(parent)
     , ui(new Ui::PlayerNamesDialog)
     , numOfPlayers(numOfPlayers)
 {
     ui->setupUi(this);
+
+    ui->verticalLayout_2->setAlignment(Qt::AlignCenter);
+
+
+    this->setWindowTitle("Player Names");
 
     qDebug() << "Number of players:" << numOfPlayers;
 
@@ -27,7 +33,7 @@ PlayerNamesDialog::PlayerNamesDialog(QWidget *parent, int numOfPlayers)
 PlayerNamesDialog::~PlayerNamesDialog()
 {
     delete ui;
-    qDebug() << "Player names dialog closed";
+    qDebug() << "PlayerNamesDialog closed";
 }
 
 QVector<QString> PlayerNamesDialog::getPlayers(){

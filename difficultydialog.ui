@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>NumPlayersDialog</class>
- <widget class="QDialog" name="NumPlayersDialog">
+ <class>DifficultyDialog</class>
+ <widget class="QDialog" name="DifficultyDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -16,9 +16,9 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>230</y>
-     <width>141</width>
+     <x>120</x>
+     <y>240</y>
+     <width>161</width>
      <height>32</height>
     </rect>
    </property>
@@ -29,41 +29,76 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QSpinBox" name="spinBox">
+  <widget class="QPushButton" name="intermediateButton">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>140</y>
-     <width>41</width>
-     <height>21</height>
+     <x>100</x>
+     <y>130</y>
+     <width>201</width>
+     <height>31</height>
     </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
    </property>
    <property name="font">
     <font>
-     <pointsize>18</pointsize>
+     <bold>true</bold>
     </font>
    </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
+   <property name="text">
+    <string>Intermediate</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="beginnerButton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>90</y>
+     <width>201</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Beginner</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="expertButton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>170</y>
+     <width>201</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Expert</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>70</y>
-     <width>181</width>
-     <height>20</height>
+     <x>130</x>
+     <y>50</y>
+     <width>141</width>
+     <height>16</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
    <property name="text">
-    <string>Enter number of players (2-4):</string>
+    <string>Select difficulty level</string>
    </property>
   </widget>
  </widget>
@@ -72,7 +107,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>NumPlayersDialog</receiver>
+   <receiver>DifficultyDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -88,7 +123,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>NumPlayersDialog</receiver>
+   <receiver>DifficultyDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -7,6 +7,9 @@ NumPlayersDialog::NumPlayersDialog(QWidget *parent)
     , ui(new Ui::NumPlayersDialog)
 {
     ui->setupUi(this);
+
+    this->setWindowTitle("Number of Players");
+
     ui->spinBox->setMinimum(2);
     ui->spinBox->setMaximum(4);
     qDebug() << "NumPlayersDialog created.";
