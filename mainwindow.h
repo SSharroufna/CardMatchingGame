@@ -3,6 +3,7 @@
 
 #include "numplayersdialog.h"
 #include "playernamesdialog.h"
+#include "player.h"
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -33,6 +34,8 @@ private:
 
     //Initializing players
     NumPlayersDialog *numPlayers;
+    QVector<Player> players;
+    int currPlayerIndex;
 
 };
 #endif // MAINWINDOW_H

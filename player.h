@@ -4,7 +4,7 @@
 #include <QString>
 
 
-class player
+class Player
 {
 public:
     // Constructor

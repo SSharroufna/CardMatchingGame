@@ -2,6 +2,9 @@
 #include "ui_mainwindow.h"
 #include "numplayersdialog.h"
 #include "playernamesdialog.h"
+#include <QString>
+#include <QDebug>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -15,8 +18,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     qDebug() << numPlayers->getNumPlayers();
 
+    //Dialog for players to input names
     PlayerNamesDialog playerNamesDialog(this, numPlayers->getNumPlayers());
     playerNamesDialog.exec();
+
+    //Initialize players and store them in vector
+    for (QString name : playerNamesDialog.getPlayers()){
+        Player player(name);
+        qDebug() << "Player" << name << "was made";
+        players.append(player);
+    }
 
     // Setting up the graphics view and scene
     QGraphicsView *view = new QGraphicsView(this);
