@@ -29,36 +29,35 @@ MainWindow::MainWindow(QWidget *parent)
         players.append(player);
     }
 
-    // Setting up the graphics view and scene
-    QGraphicsView *view = new QGraphicsView(this);
-    scene = new QGraphicsScene(this);
-    view->setScene(scene);
-    setCentralWidget(view);
+    // // Setting up the graphics view and scene
+    // scene = new QGraphicsScene(this);
+    // ui->scene->setScene(scene);
+    // setCentralWidget(scene);
 
-    // Load card images and create pixmap items
-    // A QVector<QPixmap> containing card images
-    QVector<QPixmap> cardImages;
+    // // Load card images and create pixmap items
+    // // A QVector<QPixmap> containing card images
+    // QVector<QPixmap> cardImages;
 
-    // Load a single card image
-    QPixmap cardImage("Users/Download/Card1.png");
+    // // Load a single card image
+    // QPixmap cardImage("Users/Download/Card1.png");
 
-    // Add the single card image to the QVector<QPixmap>
-    cardImages.append(cardImage);
+    // // Add the single card image to the QVector<QPixmap>
+    // cardImages.append(cardImage);
 
-    // Populate cardImages
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 2; ++j) {
-            int randomIndex = QRandomGenerator::global()->bounded(cardImages.size());
-            QPixmap cardPixmap = cardImages.takeAt(randomIndex);
-            QGraphicsPixmapItem *cardItem = new QGraphicsPixmapItem(cardPixmap);
-            cardItem->setPos(i * 100, j * 150); //Position in the UI
-            scene->addItem(cardItem);
-            cards.append(cardItem);
-        }
-    }
+    // // Populate cardImages
+    // for (int i = 0; i < 8; ++i) {
+    //     for (int j = 0; j < 2; ++j) {
+    //         int randomIndex = QRandomGenerator::global()->bounded(cardImages.size());
+    //         QPixmap cardPixmap = cardImages.takeAt(randomIndex);
+    //         QGraphicsPixmapItem *cardItem = new QGraphicsPixmapItem(cardPixmap);
+    //         cardItem->setPos(i * 100, j * 150); //Position in the UI
+    //         scene->addItem(cardItem);
+    //         cards.append(cardItem);
+    //     }
+    // }
 
-    // Connect signals and slots
-    connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
+    // // Connect signals and slots
+    // connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
 }
 
 MainWindow::~MainWindow()

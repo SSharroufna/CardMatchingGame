@@ -23,7 +23,7 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QGraphicsView *graphicsView_2;
+    QGraphicsView *scene;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -34,13 +34,13 @@ public:
         MainWindow->resize(951, 641);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
-        graphicsView_2 = new QGraphicsView(centralwidget);
-        graphicsView_2->setObjectName("graphicsView_2");
-        graphicsView_2->setGeometry(QRect(200, 30, 500, 500));
+        scene = new QGraphicsView(centralwidget);
+        scene->setObjectName("scene");
+        scene->setGeometry(QRect(200, 30, 500, 500));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 951, 37));
+        menubar->setGeometry(QRect(0, 0, 951, 24));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
