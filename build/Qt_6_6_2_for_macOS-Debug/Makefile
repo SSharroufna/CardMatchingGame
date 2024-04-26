@@ -1130,6 +1130,12 @@ moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtextedit.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QVBoxLayout \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		../../playernamesdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QVector \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qvector.h \
+		../../player.h \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QString \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstring.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QGraphicsScene \
@@ -1140,8 +1146,6 @@ moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qgraphicsitem.h \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QRandomGenerator \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qrandom.h \
-		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QVector \
-		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qvector.h \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QDebug \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qdebug.h \
 		../../../Qt/6.6.2/macos/libexec/moc
@@ -1210,6 +1214,12 @@ main.o: ../../main.cpp ../../mainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtextedit.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QVBoxLayout \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		../../playernamesdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QVector \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qvector.h \
+		../../player.h \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QString \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstring.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QGraphicsScene \
@@ -1220,8 +1230,6 @@ main.o: ../../main.cpp ../../mainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qgraphicsitem.h \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QRandomGenerator \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qrandom.h \
-		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QVector \
-		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qvector.h \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QDebug \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qdebug.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QApplication \
@@ -1238,6 +1246,12 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qtextedit.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QVBoxLayout \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		../../playernamesdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QVector \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qvector.h \
+		../../player.h \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QString \
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qstring.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QGraphicsScene \
@@ -1248,8 +1262,6 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qgraphicsitem.h \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QRandomGenerator \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qrandom.h \
-		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QVector \
-		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qvector.h \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QDebug \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qdebug.h \
 		ui_mainwindow.h
@@ -1281,7 +1293,9 @@ playernamesdialog.o: ../../playernamesdialog.cpp ../../playernamesdialog.h \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qvector.h \
 		ui_playernamesdialog.h \
 		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/QDebug \
-		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qdebug.h
+		../../../Qt/6.6.2/macos/lib/QtCore.framework/Headers/qdebug.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qlabel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o playernamesdialog.o ../../playernamesdialog.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

@@ -8,7 +8,7 @@ class Player
 {
 public:
     // Constructor
-    player(QString playerName) : name(playerName), score(0), matchedPairs(0), turns(0) {}
+    Player(QString playerName) : name(playerName), score(0), matchedPairs(0), turns(0) {}
 
     // Getters
     //QString getName() const { return name; }
