@@ -52,18 +52,22 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../../main.cpp \
+SOURCES       = ../../difficultydialog.cpp \
+		../../main.cpp \
 		../../mainwindow.cpp \
 		../../numplayersdialog.cpp \
 		../../player.cpp \
-		../../playernamesdialog.cpp moc_mainwindow.cpp \
+		../../playernamesdialog.cpp moc_difficultydialog.cpp \
+		moc_mainwindow.cpp \
 		moc_numplayersdialog.cpp \
 		moc_playernamesdialog.cpp
-OBJECTS       = main.o \
+OBJECTS       = difficultydialog.o \
+		main.o \
 		mainwindow.o \
 		numplayersdialog.o \
 		player.o \
 		playernamesdialog.o \
+		moc_difficultydialog.o \
 		moc_mainwindow.o \
 		moc_numplayersdialog.o \
 		moc_playernamesdialog.o
@@ -385,10 +389,12 @@ DIST          = /Qt/6.6.2/macos/mkspecs/features/spec_pre.prf \
 		/Qt/6.6.2/macos/mkspecs/features/exceptions.prf \
 		/Qt/6.6.2/macos/mkspecs/features/yacc.prf \
 		/Qt/6.6.2/macos/mkspecs/features/lex.prf \
-		../../../../HW5.pro ../../mainwindow.h \
+		../../../../HW5.pro ../../difficultydialog.h \
+		../../mainwindow.h \
 		../../numplayersdialog.h \
 		../../player.h \
-		../../playernamesdialog.h ../../main.cpp \
+		../../playernamesdialog.h ../../difficultydialog.cpp \
+		../../main.cpp \
 		../../mainwindow.cpp \
 		../../numplayersdialog.cpp \
 		../../player.cpp \
@@ -413,7 +419,7 @@ include /Users/liliagarcia/Qt/6.6.2/macos/mkspecs/features/mac/sdk.mk
 first: all
 ####### Build rules
 
-HW5.app/Contents/MacOS/HW5: ui_mainwindow.h ui_numplayersdialog.h ui_playernamesdialog.h $(OBJECTS)  
+HW5.app/Contents/MacOS/HW5: ui_difficultydialog.h ui_mainwindow.h ui_numplayersdialog.h ui_playernamesdialog.h $(OBJECTS)  
 	@test -d HW5.app/Contents/MacOS/ || mkdir -p HW5.app/Contents/MacOS/
 	$(LINK) $(LFLAGS) -o $(TARGET)  $(OBJECTS) $(OBJCOMP) $(LIBS)
 
@@ -1086,9 +1092,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../mainwindow.h ../../numplayersdialog.h ../../player.h ../../playernamesdialog.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../main.cpp ../../mainwindow.cpp ../../numplayersdialog.cpp ../../player.cpp ../../playernamesdialog.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../mainwindow.ui ../../numplayersdialog.ui ../../playernamesdialog.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../../difficultydialog.h ../../mainwindow.h ../../numplayersdialog.h ../../player.h ../../playernamesdialog.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../difficultydialog.cpp ../../main.cpp ../../mainwindow.cpp ../../numplayersdialog.cpp ../../player.cpp ../../playernamesdialog.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../difficultydialog.ui ../../mainwindow.ui ../../numplayersdialog.ui ../../playernamesdialog.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1117,9 +1123,17 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_numplayersdialog.cpp moc_playernamesdialog.cpp
+compiler_moc_header_make_all: moc_difficultydialog.cpp moc_mainwindow.cpp moc_numplayersdialog.cpp moc_playernamesdialog.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_numplayersdialog.cpp moc_playernamesdialog.cpp
+	-$(DEL_FILE) moc_difficultydialog.cpp moc_mainwindow.cpp moc_numplayersdialog.cpp moc_playernamesdialog.cpp
+moc_difficultydialog.cpp: ../../difficultydialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QDialog \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtGui.framework/Headers/QPalette \
+		../../../Qt/6.6.2/macos/lib/QtGui.framework/Headers/qpalette.h \
+		../../../Qt/6.6.2/macos/libexec/moc
+	/Users/liliagarcia/Qt/6.6.2/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=15 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/liliagarcia/Qt/6.6.2/macos/mkspecs/macx-clang -I/Users/liliagarcia/CardMatchingGame -I/Users/liliagarcia/Qt/6.6.2/macos/lib/QtWidgets.framework/Headers -I/Users/liliagarcia/Qt/6.6.2/macos/lib/QtGui.framework/Headers -I/Users/liliagarcia/Qt/6.6.2/macos/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/Users/liliagarcia/Qt/6.6.2/macos/lib ../../difficultydialog.h -o moc_difficultydialog.cpp
+
 moc_mainwindow.cpp: ../../mainwindow.h \
 		../../numplayersdialog.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QDialog \
@@ -1177,9 +1191,13 @@ compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h ui_numplayersdialog.h ui_playernamesdialog.h
+compiler_uic_make_all: ui_difficultydialog.h ui_mainwindow.h ui_numplayersdialog.h ui_playernamesdialog.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h ui_numplayersdialog.h ui_playernamesdialog.h
+	-$(DEL_FILE) ui_difficultydialog.h ui_mainwindow.h ui_numplayersdialog.h ui_playernamesdialog.h
+ui_difficultydialog.h: ../../difficultydialog.ui \
+		../../../Qt/6.6.2/macos/libexec/uic
+	/Users/liliagarcia/Qt/6.6.2/macos/libexec/uic ../../difficultydialog.ui -o ui_difficultydialog.h
+
 ui_mainwindow.h: ../../mainwindow.ui \
 		../../../Qt/6.6.2/macos/libexec/uic
 	/Users/liliagarcia/Qt/6.6.2/macos/libexec/uic ../../mainwindow.ui -o ui_mainwindow.h
@@ -1203,6 +1221,14 @@ compiler_lex_clean:
 compiler_clean: compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
+
+difficultydialog.o: ../../difficultydialog.cpp ../../difficultydialog.h \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QDialog \
+		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qdialog.h \
+		../../../Qt/6.6.2/macos/lib/QtGui.framework/Headers/QPalette \
+		../../../Qt/6.6.2/macos/lib/QtGui.framework/Headers/qpalette.h \
+		ui_difficultydialog.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o difficultydialog.o ../../difficultydialog.cpp
 
 main.o: ../../main.cpp ../../mainwindow.h \
 		../../numplayersdialog.h \
@@ -1297,6 +1323,9 @@ playernamesdialog.o: ../../playernamesdialog.cpp ../../playernamesdialog.h \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/QLabel \
 		../../../Qt/6.6.2/macos/lib/QtWidgets.framework/Headers/qlabel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o playernamesdialog.o ../../playernamesdialog.cpp
+
+moc_difficultydialog.o: moc_difficultydialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_difficultydialog.o moc_difficultydialog.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

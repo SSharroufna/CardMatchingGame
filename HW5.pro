@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    difficultydialog.cpp \
     main.cpp \
     mainwindow.cpp \
     numplayersdialog.cpp \
@@ -16,12 +17,14 @@ SOURCES += \
     playernamesdialog.cpp
 
 HEADERS += \
+    difficultydialog.h \
     mainwindow.h \
     numplayersdialog.h \
     player.h \
     playernamesdialog.h
 
 FORMS += \
+    difficultydialog.ui \
     mainwindow.ui \
     numplayersdialog.ui \
     playernamesdialog.ui

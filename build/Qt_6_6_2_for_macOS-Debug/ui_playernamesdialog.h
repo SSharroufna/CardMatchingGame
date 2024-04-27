@@ -33,12 +33,12 @@ public:
         PlayerNamesDialog->resize(400, 300);
         buttonBox = new QDialogButtonBox(PlayerNamesDialog);
         buttonBox->setObjectName("buttonBox");
-        buttonBox->setGeometry(QRect(120, 240, 161, 32));
+        buttonBox->setGeometry(QRect(120, 250, 161, 32));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         verticalLayoutWidget = new QWidget(PlayerNamesDialog);
         verticalLayoutWidget->setObjectName("verticalLayoutWidget");
-        verticalLayoutWidget->setGeometry(QRect(99, 80, 201, 111));
+        verticalLayoutWidget->setGeometry(QRect(99, 60, 201, 181));
         verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_2->setObjectName("verticalLayout_2");
         verticalLayout_2->setContentsMargins(0, 0, 0, 0);

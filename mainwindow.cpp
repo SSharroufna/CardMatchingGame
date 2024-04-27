@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "numplayersdialog.h"
 #include "playernamesdialog.h"
+#include "difficultydialog.h"
 #include <QString>
 #include <QDebug>
 
@@ -12,15 +13,16 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    //Dialog to enter number of players
-    numPlayers = new NumPlayersDialog();
-    numPlayers->exec();
 
-    qDebug() << numPlayers->getNumPlayers();
+    //Dialog to enter number of players
+    NumPlayersDialog numPlayers;
+    numPlayers.exec();
+
 
     //Dialog for players to input names
-    PlayerNamesDialog playerNamesDialog(this, numPlayers->getNumPlayers());
+    PlayerNamesDialog playerNamesDialog(this, numPlayers.getNumPlayers());
     playerNamesDialog.exec();
+
 
     //Initialize players and store them in vector
     for (QString name : playerNamesDialog.getPlayers()){
@@ -29,24 +31,24 @@ MainWindow::MainWindow(QWidget *parent)
         players.append(player);
     }
 
+   
+      
+    //Dialog for game difficulty
+    DifficultyDialog diffDialog;
+    diffDialog.exec();
+
     // Setting up the graphics view and scene
     scene = new QGraphicsScene(this);
     ui->scene->setScene(scene);
     //setCentralWidget(scene);
-
-    // // Load card images and create pixmap items
-    // A QVector<QPixmap> containing card images
-    // QVector<QPixmap> cardImages;
 
     // Load card images and create pixmap items
     QVector<QPixmap> cardImages;
 
     // Load a single card image,
     QPixmap cardImage("/Users/sarah/Downloads/Card1.png");
-
     // Resize the card image
     cardImage = cardImage.scaledToWidth(50);
-
     // Add the single card image to the QVector<QPixmap>
     cardImages.append(cardImage);
 

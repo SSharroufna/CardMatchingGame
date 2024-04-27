@@ -33,7 +33,6 @@ private:
     QVector<QGraphicsPixmapItem*> cards;
 
     //Initializing players
-    NumPlayersDialog *numPlayers;
     QVector<Player> players;
     int currPlayerIndex;
 
