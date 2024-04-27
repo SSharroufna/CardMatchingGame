@@ -31,41 +31,46 @@ MainWindow::MainWindow(QWidget *parent)
         players.append(player);
     }
 
+   
+      
     //Dialog for game difficulty
     DifficultyDialog diffDialog;
     diffDialog.exec();
 
+    // Setting up the graphics view and scene
+    scene = new QGraphicsScene(this);
+    ui->scene->setScene(scene);
+    //setCentralWidget(scene);
 
+    // Load card images and create pixmap items
+    QVector<QPixmap> cardImages;
 
-    // // Setting up the graphics view and scene
-    // scene = new QGraphicsScene(this);
-    // ui->scene->setScene(scene);
-    // setCentralWidget(scene);
+    // Load a single card image,
+    QPixmap cardImage("/Users/sarah/Downloads/Card1.png");
+    // Resize the card image
+    cardImage = cardImage.scaledToWidth(50);
+    // Add the single card image to the QVector<QPixmap>
+    cardImages.append(cardImage);
 
-    // // Load card images and create pixmap items
-    // // A QVector<QPixmap> containing card images
-    // QVector<QPixmap> cardImages;
+    qDebug() << "Number of card images available:" << cardImages.size();
 
-    // // Load a single card image
-    // QPixmap cardImage("Users/Download/Card1.png");
+    // Populate cardImages
+    for (int i = 0; i < 6; ++i) {
+        for (int j = 0; j < 6; ++j) {
+            if (!cardImages.isEmpty()) {
+                QPixmap cardPixmap = cardImages.first();
 
-    // // Add the single card image to the QVector<QPixmap>
-    // cardImages.append(cardImage);
+                QGraphicsPixmapItem *cardItem = new QGraphicsPixmapItem(cardPixmap);
+                cardItem->setPos(i * 100, j * 90); //Position in the UI
+                cardItem->setFlag(QGraphicsItem::ItemIsSelectable);
+                scene->addItem(cardItem);
+                cards.append(cardItem);
+            }
+        }
+    }
 
-    // // Populate cardImages
-    // for (int i = 0; i < 8; ++i) {
-    //     for (int j = 0; j < 2; ++j) {
-    //         int randomIndex = QRandomGenerator::global()->bounded(cardImages.size());
-    //         QPixmap cardPixmap = cardImages.takeAt(randomIndex);
-    //         QGraphicsPixmapItem *cardItem = new QGraphicsPixmapItem(cardPixmap);
-    //         cardItem->setPos(i * 100, j * 150); //Position in the UI
-    //         scene->addItem(cardItem);
-    //         cards.append(cardItem);
-    //     }
-    // }
-
-    // // Connect signals and slots
-    // connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
+    //Connect signals and slots
+    connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
 }
 
 MainWindow::~MainWindow()
@@ -75,20 +80,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::handleCardClick()
 {
-    QList<QGraphicsItem*> selectedItems = scene->selectedItems();
-    if (selectedItems.size() == 2) {
-        QGraphicsPixmapItem *firstCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(0));
-        QGraphicsPixmapItem *secondCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(1));
-        if (firstCard && secondCard) {
-            // Check if cards match
-            if (firstCard->pixmap().toImage() == secondCard->pixmap().toImage()) {
-                qDebug() << "Match!";
+    qDebug() << "Card clicked!";
 
-            } else {
-                qDebug() << "Not a match!";
-
-            }
-        }
-        scene->clearSelection();
-    }
+    // QList<QGraphicsItem*> selectedItems = scene->selectedItems();
+    // if (selectedItems.size() == 2) {
+    //     QGraphicsPixmapItem *firstCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(0));
+    //     QGraphicsPixmapItem *secondCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(1));
+    //     if (firstCard && secondCard) {
+    //         // Check if cards match
+    //         if (firstCard->pixmap().toImage() == secondCard->pixmap().toImage()) {
+    //             qDebug() << "Match!";
+    //         } else {
+    //             qDebug() << "Not a match!";
+    //         }
+    //     }
+    //     scene->clearSelection();
+    // }
 }
