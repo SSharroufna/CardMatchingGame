@@ -38,6 +38,8 @@ private slots:
 
     void on_startTurnBtn_clicked();
 
+    void on_quitGameBtn_clicked();
+
 private:
     CardPrototypeFactory cardFactory;
     Ui::MainWindow *ui;

@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Card Match");
 
 
     //Dialog to enter number of players
@@ -33,33 +34,48 @@ MainWindow::MainWindow(QWidget *parent)
         qDebug() << "Player" << name << "was made";
         players.append(player);
     }
-
    
     //Dialog for game difficulty
     DifficultyDialog diffDialog;
     diffDialog.exec();
 
     //Display game difficulty in MainWindow
+    //Changes color based on selected difficulty
+    //so it's easy to distinguish
     gameDifficulty = diffDialog.getDifficulty();
 
     switch (gameDifficulty){
         case 1:
-            qDebug() << "Green Box";
-            ui->difficultyBox->setStyleSheet("background-color : green");
+            qDebug() << "Green Box for Beginner";
             ui->difficultyLabel->setText("Beginner");
+            ui->difficultyLabel->setStyleSheet("background-color : green;"
+                                                "border-top-left-radius : 5px;" "border-top-right-radius : 5px;"
+                                               "border-bottom-left-radius : 5px;" "border-bottom-right-radius : 5px;");
             break;
         case 2:
-            qDebug() << "Orange Box";
-            ui->difficultyBox->setStyleSheet("background-color : orange");
+            qDebug() << "Orange Box for Intermediate";;
             ui->difficultyLabel->setText("Intermediate");
+            ui->difficultyLabel->setStyleSheet("background-color : orange;"
+                                               "border-top-left-radius : 5px;" "border-top-right-radius : 5px;"
+                                               "border-bottom-left-radius : 5px;" "border-bottom-right-radius : 5px;");
             break;
         case 3:
-            qDebug() << "Red Box";
-            ui->difficultyBox->setStyleSheet("background-color : red");
+            qDebug() << "Red Box for Expert";
             ui->difficultyLabel->setText("Expert");
+            ui->difficultyLabel->setStyleSheet("background-color : red;"
+                                               "border-top-left-radius : 5px;" "border-top-right-radius : 5px;"
+                                               "border-bottom-left-radius : 5px;" "border-bottom-right-radius : 5px;");
             break;
     }
 
+    //Display stuff
+    ui->scoreboardList->setStyleSheet("border-top-left-radius : 5px;" "border-top-right-radius : 5px;"
+                                   "border-bottom-left-radius : 5px;" "border-bottom-right-radius : 5px;");
+
+    ui->timeUp->setVisible(false);
+    ui->timeUp->setStyleSheet("color : red");
+
+    //Initialize currPlayerIndex
     currPlayerIndex = 0;
 
     // Setting up the graphics view and scene
@@ -69,7 +85,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     populateSceneWithCards();
 
+    //Set up timer
     lcdNumber = ui->timerDisplay;
+    ui->startTurnBtn->setEnabled(false);
+    ui->boosterBtn->setEnabled(false);
 
     //Connect signals and slots
     connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
@@ -94,7 +113,7 @@ void MainWindow::handleCardClick()
 
     // If exactly one item is selected
     if (selectedItems.size() == 2) {
-        qDebug() << "Two cards chosen !";
+        qDebug() << "Two cards chosen!";
 
         QGraphicsPixmapItem *firstCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(0));
         QGraphicsPixmapItem *secondCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(1));
@@ -181,16 +200,20 @@ void MainWindow::populateSceneWithCards() {
 
 
 void MainWindow::on_startGameBtn_clicked(){
+    ui->timeUp->setVisible(false);
     qDebug() << "Start game button clicked";
 
     ui->gameStatusDisplay->setText(players[currPlayerIndex].getName());
+    qDebug() << "Player " << players[currPlayerIndex].getName() << "'s turn";
 
+    //Starts a new timer at the beginning of first turn
     countdownValue = 10;
 
     countdownTimer = new QTimer(this);
     connect(countdownTimer, &QTimer::timeout, this, &MainWindow::updateCountdown);
     countdownTimer->start(1000);
 
+    //Disable startGameBtn once game is initialized, for the rest of the game
     ui->startGameBtn->setEnabled(false);
 }
 
@@ -202,28 +225,43 @@ void MainWindow::updateCountdown(){
         countdownValue--;
         ui->startGameBtn->setEnabled(false);
         ui->startTurnBtn->setEnabled(false);
+        ui->boosterBtn->setEnabled(true);
     }
     else {
         countdownTimer->stop();
         qDebug() << "Timer stopped";
+        //When timer stops, playerIndex updates and moves to next player's turn
         currPlayerIndex = (currPlayerIndex + 1) % players.size();
         ui->startTurnBtn->setEnabled(true);
+        ui->boosterBtn->setEnabled(false);
         delete countdownTimer;
+
+        ui->timeUp->setVisible(true);
+        //We can add something here so that the player cannot interact/click
+        //cards after their turn ends. AKA when the timer runs out
     }
 }
 
 
-void MainWindow::on_startTurnBtn_clicked()
-{
+void MainWindow::on_startTurnBtn_clicked(){
+    ui->timeUp->setVisible(false);
     qDebug() << "Start turn button clicked";
 
     ui->gameStatusDisplay->setText(players[currPlayerIndex].getName());
+    qDebug() << "Player " << players[currPlayerIndex].getName() << "'s turn";
 
+    //Starts a new timer at the beginning of each new turn
     countdownValue = 10;
 
     countdownTimer = new QTimer(this);
     connect(countdownTimer, &QTimer::timeout, this, &MainWindow::updateCountdown);
     countdownTimer->start(1000);
 
+}
+
+
+void MainWindow::on_quitGameBtn_clicked()
+{
+    qDebug() << "Quit Button Clicked";
 }
 

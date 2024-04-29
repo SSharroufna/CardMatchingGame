@@ -13,14 +13,13 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -44,10 +43,11 @@ public:
     QGroupBox *playerBox;
     QLabel *gameStatusDisplay;
     QGroupBox *scoreboardBox;
-    QTableWidget *tableWidget;
+    QListWidget *scoreboardList;
     QGroupBox *boosterBox;
     QPushButton *startTurnBtn;
     QPushButton *boosterBtn;
+    QLabel *timeUp;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -94,36 +94,32 @@ public:
         difficultyBox->setFlat(false);
         difficultyLabel = new QLabel(difficultyBox);
         difficultyLabel->setObjectName("difficultyLabel");
-        difficultyLabel->setGeometry(QRect(0, 30, 201, 51));
+        difficultyLabel->setGeometry(QRect(0, 35, 201, 45));
         QFont font2;
-        font2.setPointSize(24);
+        font2.setPointSize(25);
         font2.setBold(true);
         font2.setItalic(false);
         difficultyLabel->setFont(font2);
         difficultyLabel->setAlignment(Qt::AlignCenter);
         movesBox = new QGroupBox(centralwidget);
         movesBox->setObjectName("movesBox");
-        movesBox->setGeometry(QRect(1110, 250, 191, 80));
+        movesBox->setGeometry(QRect(1110, 260, 191, 80));
         movesBox->setFont(font1);
         movesBox->setAlignment(Qt::AlignCenter);
         moves_label = new QLabel(movesBox);
         moves_label->setObjectName("moves_label");
-        moves_label->setGeometry(QRect(0, 40, 191, 41));
-        QFont font3;
-        font3.setPointSize(24);
-        font3.setBold(true);
-        font3.setItalic(true);
-        moves_label->setFont(font3);
+        moves_label->setGeometry(QRect(0, 35, 191, 42));
+        moves_label->setFont(font1);
         moves_label->setAlignment(Qt::AlignCenter);
         scoreBox = new QGroupBox(centralwidget);
         scoreBox->setObjectName("scoreBox");
-        scoreBox->setGeometry(QRect(1110, 340, 191, 80));
+        scoreBox->setGeometry(QRect(1110, 350, 191, 80));
         scoreBox->setFont(font1);
         scoreBox->setAlignment(Qt::AlignCenter);
         score_label = new QLabel(scoreBox);
         score_label->setObjectName("score_label");
-        score_label->setGeometry(QRect(0, 40, 191, 41));
-        score_label->setFont(font3);
+        score_label->setGeometry(QRect(0, 35, 191, 42));
+        score_label->setFont(font1);
         score_label->setAlignment(Qt::AlignCenter);
         playerBox = new QGroupBox(centralwidget);
         playerBox->setObjectName("playerBox");
@@ -132,57 +128,41 @@ public:
         playerBox->setAlignment(Qt::AlignCenter);
         gameStatusDisplay = new QLabel(playerBox);
         gameStatusDisplay->setObjectName("gameStatusDisplay");
-        gameStatusDisplay->setGeometry(QRect(0, 40, 191, 41));
-        QFont font4;
-        font4.setPointSize(20);
-        font4.setBold(true);
-        font4.setItalic(false);
-        gameStatusDisplay->setFont(font4);
+        gameStatusDisplay->setGeometry(QRect(0, 35, 191, 42));
+        gameStatusDisplay->setFont(font2);
         gameStatusDisplay->setAlignment(Qt::AlignCenter);
         scoreboardBox = new QGroupBox(centralwidget);
         scoreboardBox->setObjectName("scoreboardBox");
-        scoreboardBox->setGeometry(QRect(20, 220, 201, 341));
+        scoreboardBox->setGeometry(QRect(20, 220, 201, 211));
         scoreboardBox->setFont(font1);
         scoreboardBox->setAutoFillBackground(true);
         scoreboardBox->setAlignment(Qt::AlignCenter);
         scoreboardBox->setFlat(false);
-        tableWidget = new QTableWidget(scoreboardBox);
-        if (tableWidget->columnCount() < 2)
-            tableWidget->setColumnCount(2);
-        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        __qtablewidgetitem->setBackground(QColor(105, 81, 255));
-        tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
-        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        __qtablewidgetitem1->setBackground(QColor(105, 81, 255));
-        tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
-        tableWidget->setObjectName("tableWidget");
-        tableWidget->setGeometry(QRect(1, 30, 201, 311));
-        QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(tableWidget->sizePolicy().hasHeightForWidth());
-        tableWidget->setSizePolicy(sizePolicy);
-        QFont font5;
-        font5.setPointSize(12);
-        font5.setBold(true);
-        font5.setItalic(true);
-        tableWidget->setFont(font5);
-        tableWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
-        tableWidget->setSortingEnabled(true);
-        tableWidget->setWordWrap(false);
-        tableWidget->setCornerButtonEnabled(false);
-        tableWidget->verticalHeader()->setVisible(false);
+        scoreboardList = new QListWidget(scoreboardBox);
+        scoreboardList->setObjectName("scoreboardList");
+        scoreboardList->setGeometry(QRect(0, 34, 201, 181));
+        scoreboardList->setSortingEnabled(true);
         boosterBox = new QGroupBox(centralwidget);
         boosterBox->setObjectName("boosterBox");
-        boosterBox->setGeometry(QRect(1110, 450, 191, 80));
+        boosterBox->setGeometry(QRect(1110, 460, 191, 80));
         boosterBox->setFont(font1);
         boosterBox->setAlignment(Qt::AlignCenter);
         startTurnBtn = new QPushButton(centralwidget);
         startTurnBtn->setObjectName("startTurnBtn");
-        startTurnBtn->setGeometry(QRect(1110, 600, 191, 32));
+        startTurnBtn->setGeometry(QRect(1110, 610, 191, 32));
         boosterBtn = new QPushButton(centralwidget);
         boosterBtn->setObjectName("boosterBtn");
-        boosterBtn->setGeometry(QRect(1149, 550, 111, 32));
+        boosterBtn->setGeometry(QRect(1149, 560, 111, 32));
+        timeUp = new QLabel(centralwidget);
+        timeUp->setObjectName("timeUp");
+        timeUp->setGeometry(QRect(1120, 230, 171, 31));
+        QFont font3;
+        font3.setPointSize(28);
+        font3.setBold(true);
+        font3.setItalic(true);
+        font3.setUnderline(true);
+        timeUp->setFont(font3);
+        timeUp->setAlignment(Qt::AlignCenter);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -213,13 +193,10 @@ public:
         playerBox->setTitle(QCoreApplication::translate("MainWindow", "Player's Turn", nullptr));
         gameStatusDisplay->setText(QString());
         scoreboardBox->setTitle(QCoreApplication::translate("MainWindow", "Scoreboard", nullptr));
-        QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Player", nullptr));
-        QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QCoreApplication::translate("MainWindow", "Score", nullptr));
         boosterBox->setTitle(QCoreApplication::translate("MainWindow", "Boosters", nullptr));
         startTurnBtn->setText(QCoreApplication::translate("MainWindow", "Start Turn", nullptr));
         boosterBtn->setText(QCoreApplication::translate("MainWindow", "Use Booster", nullptr));
+        timeUp->setText(QCoreApplication::translate("MainWindow", "TIME'S UP!", nullptr));
     } // retranslateUi
 
 };
