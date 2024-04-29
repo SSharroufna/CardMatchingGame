@@ -39,6 +39,29 @@ MainWindow::MainWindow(QWidget *parent)
     DifficultyDialog diffDialog;
     diffDialog.exec();
 
+    gameDifficulty = diffDialog.getDifficulty();
+
+
+    switch (gameDifficulty){
+        case 1:
+            qDebug() << "Green Box";
+            ui->difficultyBox->setStyleSheet("background-color : green");
+            ui->difficultyLabel->setText("Beginner");
+            break;
+        case 2:
+            qDebug() << "Orange Box";
+            ui->difficultyBox->setStyleSheet("background-color : orange");
+            ui->difficultyLabel->setText("Intermediate");
+            break;
+        case 3:
+            qDebug() << "Red Box";
+            ui->difficultyBox->setStyleSheet("background-color : red");
+            ui->difficultyLabel->setText("Expert");
+            break;
+    }
+
+
+
     // Setting up the graphics view and scene
     scene = new QGraphicsScene(this);
     ui->scene->setScene(scene);

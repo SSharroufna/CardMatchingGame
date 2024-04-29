@@ -12,6 +12,7 @@
 #include <QVector>
 #include <QDebug>
 #include "cardprototype.h"
+#include "difficultydialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,6 +35,7 @@ private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
     QVector<QGraphicsPixmapItem*> cards;
+    int gameDifficulty;
 
     //Initializing players
     QVector<Player> players;

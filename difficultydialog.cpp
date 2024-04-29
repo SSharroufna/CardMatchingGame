@@ -23,17 +23,17 @@ DifficultyDialog::~DifficultyDialog()
     delete ui;
 }
 
-QString DifficultyDialog::getDifficulty(){
+int DifficultyDialog::getDifficulty(){
     return difficulty;
 }
 
-void DifficultyDialog::setDifficulty(QString s){
-    difficulty = s;
+void DifficultyDialog::setDifficulty(int n){
+    difficulty = n;
 }
 
 void DifficultyDialog::on_beginnerButton_clicked()
 {
-    setDifficulty("Beginner");
+    setDifficulty(1);
     qDebug() << "Difficulty selected: Beginner";
     ui->beginnerButton->setStyleSheet("background-color : green");
     ui->intermediateButton->setStyleSheet("background-color : grey");
@@ -44,7 +44,7 @@ void DifficultyDialog::on_beginnerButton_clicked()
 void DifficultyDialog::on_intermediateButton_clicked()
 {
     qDebug() << "Difficulty selected: Intermediate";
-    setDifficulty("Intermediate");
+    setDifficulty(2);
     ui->beginnerButton->setStyleSheet("background-color : grey");
     ui->intermediateButton->setStyleSheet("background-color : orange");
     ui->expertButton->setStyleSheet("background-color : grey");
@@ -54,7 +54,7 @@ void DifficultyDialog::on_intermediateButton_clicked()
 void DifficultyDialog::on_expertButton_clicked()
 {
     qDebug() << "Difficulty selected: Expert";
-    setDifficulty("Expert");
+    setDifficulty(3);
     ui->beginnerButton->setStyleSheet("background-color : grey");
     ui->intermediateButton->setStyleSheet("background-color : grey");
     ui->expertButton->setStyleSheet("background-color : red");

@@ -16,8 +16,8 @@ class DifficultyDialog : public QDialog
 public:
     explicit DifficultyDialog(QWidget *parent = nullptr);
     ~DifficultyDialog();
-    QString getDifficulty();
-    void setDifficulty(QString s);
+    int getDifficulty();
+    void setDifficulty(int n);
 
 private slots:
     void on_beginnerButton_clicked();
@@ -30,7 +30,7 @@ private slots:
 
 private:
     Ui::DifficultyDialog *ui;
-    QString difficulty;
+    int difficulty;
 };
 
 #endif // DIFFICULTYDIALOG_H
