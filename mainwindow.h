@@ -13,6 +13,8 @@
 #include <QDebug>
 #include "cardprototype.h"
 #include "difficultydialog.h"
+#include <QTimer>
+#include <QLCDNumber>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,10 +27,16 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void startBtn_clicked();
+    void updateCountdown();
 
 private slots:
     void handleCardClick();
     void populateSceneWithCards();
+
+    void on_startGameBtn_clicked();
+
+    void on_startTurnBtn_clicked();
 
 private:
     CardPrototypeFactory cardFactory;
@@ -40,6 +48,12 @@ private:
     //Initializing players
     QVector<Player> players;
     int currPlayerIndex;
+
+    //Timer
+    QTimer *countdownTimer;
+    QLCDNumber *lcdNumber;
+    int countdownValue = 10;
+
 
     // a map to associate each card item with its card type
     QMap<QGraphicsPixmapItem*, CardPrototypeFactory::CardType> cardTypesMap;

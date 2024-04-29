@@ -39,8 +39,8 @@ MainWindow::MainWindow(QWidget *parent)
     DifficultyDialog diffDialog;
     diffDialog.exec();
 
+    //Display game difficulty in MainWindow
     gameDifficulty = diffDialog.getDifficulty();
-
 
     switch (gameDifficulty){
         case 1:
@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
             break;
     }
 
-
+    currPlayerIndex = 0;
 
     // Setting up the graphics view and scene
     scene = new QGraphicsScene(this);
@@ -69,8 +69,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     populateSceneWithCards();
 
+    lcdNumber = ui->timerDisplay;
+
     //Connect signals and slots
     connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
+    // connect(ui->startGameBtn, &QAbstractButton::pressed, this, &MainWindow::startBtn_clicked);
 
 
 
@@ -175,4 +178,52 @@ void MainWindow::populateSceneWithCards() {
     }
 }
 
+
+
+void MainWindow::on_startGameBtn_clicked(){
+    qDebug() << "Start game button clicked";
+
+    ui->gameStatusDisplay->setText(players[currPlayerIndex].getName());
+
+    countdownValue = 10;
+
+    countdownTimer = new QTimer(this);
+    connect(countdownTimer, &QTimer::timeout, this, &MainWindow::updateCountdown);
+    countdownTimer->start(1000);
+
+    ui->startGameBtn->setEnabled(false);
+}
+
+
+
+void MainWindow::updateCountdown(){
+    if (countdownValue >= 0){
+        lcdNumber->display(countdownValue);
+        countdownValue--;
+        ui->startGameBtn->setEnabled(false);
+        ui->startTurnBtn->setEnabled(false);
+    }
+    else {
+        countdownTimer->stop();
+        qDebug() << "Timer stopped";
+        currPlayerIndex = (currPlayerIndex + 1) % players.size();
+        ui->startTurnBtn->setEnabled(true);
+        delete countdownTimer;
+    }
+}
+
+
+void MainWindow::on_startTurnBtn_clicked()
+{
+    qDebug() << "Start turn button clicked";
+
+    ui->gameStatusDisplay->setText(players[currPlayerIndex].getName());
+
+    countdownValue = 10;
+
+    countdownTimer = new QTimer(this);
+    connect(countdownTimer, &QTimer::timeout, this, &MainWindow::updateCountdown);
+    countdownTimer->start(1000);
+
+}
 

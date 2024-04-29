@@ -11,7 +11,7 @@ public:
     Player(QString playerName) : name(playerName), score(0), matchedPairs(0), turns(0) {}
 
     // Getters
-    //QString getName() const { return name; }
+    QString getName() const { return name; }
     int getScore() const { return score; }
     int getMatchedPairs() const { return matchedPairs; }
     int getTurns() const { return turns; }
