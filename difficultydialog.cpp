@@ -16,7 +16,6 @@ DifficultyDialog::DifficultyDialog(QWidget *parent)
     ui->beginnerButton->setStyleSheet("background-color : green");
     ui->intermediateButton->setStyleSheet("background-color : orange");
     ui->expertButton->setStyleSheet("background-color : red");
-
 }
 
 DifficultyDialog::~DifficultyDialog()

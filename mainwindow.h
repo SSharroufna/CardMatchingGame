@@ -11,6 +11,7 @@
 #include <QRandomGenerator>
 #include <QVector>
 #include <QDebug>
+#include "cardprototype.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,8 +27,10 @@ public:
 
 private slots:
     void handleCardClick();
+    void populateSceneWithCards();
 
 private:
+    CardPrototypeFactory cardFactory;
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
     QVector<QGraphicsPixmapItem*> cards;
@@ -35,6 +38,13 @@ private:
     //Initializing players
     QVector<Player> players;
     int currPlayerIndex;
+
+    // a map to associate each card item with its card type
+    QMap<QGraphicsPixmapItem*, CardPrototypeFactory::CardType> cardTypesMap;
+
+    // Declare a map to associate each card item with its card back item
+    QMap<QGraphicsPixmapItem*, QGraphicsPixmapItem*> cardBacks;
+
 
 };
 #endif // MAINWINDOW_H

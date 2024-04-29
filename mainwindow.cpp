@@ -5,7 +5,11 @@
 #include "difficultydialog.h"
 #include <QString>
 #include <QDebug>
-
+#include <QDir>
+#include <QRandomGenerator>
+#include <QTime>
+#include <algorithm> // Include for std::shuffle
+#include <random>    // Include for std::mt19937
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -23,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
     PlayerNamesDialog playerNamesDialog(this, numPlayers.getNumPlayers());
     playerNamesDialog.exec();
 
-
     //Initialize players and store them in vector
     for (QString name : playerNamesDialog.getPlayers()){
         Player player(name);
@@ -32,7 +35,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
    
-      
     //Dialog for game difficulty
     DifficultyDialog diffDialog;
     diffDialog.exec();
@@ -42,35 +44,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->scene->setScene(scene);
     //setCentralWidget(scene);
 
-    // Load card images and create pixmap items
-    QVector<QPixmap> cardImages;
-
-    // Load a single card image,
-    QPixmap cardImage("/Users/sarah/Downloads/Card1.png");
-    // Resize the card image
-    cardImage = cardImage.scaledToWidth(50);
-    // Add the single card image to the QVector<QPixmap>
-    cardImages.append(cardImage);
-
-    qDebug() << "Number of card images available:" << cardImages.size();
-
-    // Populate cardImages
-    for (int i = 0; i < 6; ++i) {
-        for (int j = 0; j < 6; ++j) {
-            if (!cardImages.isEmpty()) {
-                QPixmap cardPixmap = cardImages.first();
-
-                QGraphicsPixmapItem *cardItem = new QGraphicsPixmapItem(cardPixmap);
-                cardItem->setPos(i * 100, j * 90); //Position in the UI
-                cardItem->setFlag(QGraphicsItem::ItemIsSelectable);
-                scene->addItem(cardItem);
-                cards.append(cardItem);
-            }
-        }
-    }
+    populateSceneWithCards();
 
     //Connect signals and slots
     connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
+
+
+
 }
 
 MainWindow::~MainWindow()
@@ -82,18 +62,94 @@ void MainWindow::handleCardClick()
 {
     qDebug() << "Card clicked!";
 
-    // QList<QGraphicsItem*> selectedItems = scene->selectedItems();
-    // if (selectedItems.size() == 2) {
-    //     QGraphicsPixmapItem *firstCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(0));
-    //     QGraphicsPixmapItem *secondCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(1));
-    //     if (firstCard && secondCard) {
-    //         // Check if cards match
-    //         if (firstCard->pixmap().toImage() == secondCard->pixmap().toImage()) {
-    //             qDebug() << "Match!";
-    //         } else {
-    //             qDebug() << "Not a match!";
-    //         }
-    //     }
-    //     scene->clearSelection();
-    // }
+
+    // Get the selected items
+    QList<QGraphicsItem*> selectedItems = scene->selectedItems();
+
+    // If exactly one item is selected
+    if (selectedItems.size() == 2) {
+        qDebug() << "Two cards chosen !";
+
+        QGraphicsPixmapItem *firstCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(0));
+        QGraphicsPixmapItem *secondCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(1));
+
+        if (firstCard && secondCard) {
+            // Handle the selection of the two cards
+        }
+
+    }
 }
+
+void MainWindow::populateSceneWithCards() {
+
+    QVector<CardPrototypeFactory::CardType> cardTypes = {
+         CardPrototypeFactory::boy,
+        CardPrototypeFactory::computer,
+          CardPrototypeFactory::openBox,
+          CardPrototypeFactory::closedBox,
+          CardPrototypeFactory::target,
+          CardPrototypeFactory::gem,
+           CardPrototypeFactory::board,
+           CardPrototypeFactory::piano,
+          CardPrototypeFactory::bag,
+          CardPrototypeFactory::speaker,
+          CardPrototypeFactory::game,
+          CardPrototypeFactory::clock,
+          CardPrototypeFactory::map
+        };
+
+
+    // Resize the card types vector to contain half the number of cards you want
+    cardTypes.resize(36 / 2);
+
+    // Duplicate the card types to ensure each card has a pair
+    cardTypes += cardTypes;
+
+    // Load the card back image
+    QPixmap cardBackImage("/Users/sarah/Downloads/images/back.png");
+
+    // Populate the scene with cards
+    for (int i = 0; i < 6; ++i) {
+        for (int j = 0; j < 6; ++j) {
+            if (!cardTypes.isEmpty()) {
+                int randomIndex = QRandomGenerator::global()->bounded(cardTypes.size());
+
+                // Use the prototype factory to create a new card prototype object
+                CardPrototype* cardPrototype = cardFactory.createPrototype(cardTypes[randomIndex]);
+
+                // Clone the prototype to create a new card
+                CardPrototype* newCard = cardPrototype->clone();
+
+                QGraphicsPixmapItem *cardItem = new QGraphicsPixmapItem(newCard->image());
+                cardItem->setPos(i * 120, j * 110); // Position in the UI
+                cardItem->setFlag(QGraphicsItem::ItemIsSelectable);
+                cardItem->setScale(0.2);
+                cardItem->setZValue(0);
+                scene->addItem(cardItem);
+                cards.append(cardItem);
+
+                // Store the card type for each card item
+                cardTypesMap.insert(cardItem, cardTypes[randomIndex]);
+
+
+                // // Create QGraphicsPixmapItem for the card back image
+                // QGraphicsPixmapItem *cardBackItem = new QGraphicsPixmapItem(cardBackImage);
+                // cardBackItem->setPos(i * 120, j * 110); // Position in the UI
+                // cardBackItem->setScale(0.2);
+                // cardBackItem->setZValue(1);
+                // scene->addItem(cardBackItem);
+
+                // // Associate the card item with its corresponding card back item
+                // cardBacks.insert(cardItem, cardBackItem);
+
+                // Clean up the prototype object
+                delete cardPrototype;
+
+                // Remove the used card type from the vector to avoid duplicates
+                cardTypes.remove(randomIndex);
+            }
+        }
+    }
+}
+
+
