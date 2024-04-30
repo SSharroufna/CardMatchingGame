@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -25,15 +26,21 @@ public:
     QDialogButtonBox *buttonBox;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout_2;
+    QLabel *label;
 
     void setupUi(QDialog *PlayerNamesDialog)
     {
         if (PlayerNamesDialog->objectName().isEmpty())
             PlayerNamesDialog->setObjectName("PlayerNamesDialog");
         PlayerNamesDialog->resize(400, 300);
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(PlayerNamesDialog->sizePolicy().hasHeightForWidth());
+        PlayerNamesDialog->setSizePolicy(sizePolicy);
         buttonBox = new QDialogButtonBox(PlayerNamesDialog);
         buttonBox->setObjectName("buttonBox");
-        buttonBox->setGeometry(QRect(120, 250, 161, 32));
+        buttonBox->setGeometry(QRect(120, 260, 161, 32));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         verticalLayoutWidget = new QWidget(PlayerNamesDialog);
@@ -42,6 +49,9 @@ public:
         verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_2->setObjectName("verticalLayout_2");
         verticalLayout_2->setContentsMargins(0, 0, 0, 0);
+        label = new QLabel(PlayerNamesDialog);
+        label->setObjectName("label");
+        label->setGeometry(QRect(110, 10, 171, 20));
 
         retranslateUi(PlayerNamesDialog);
         QObject::connect(buttonBox, &QDialogButtonBox::accepted, PlayerNamesDialog, qOverload<>(&QDialog::accept));
@@ -52,7 +62,8 @@ public:
 
     void retranslateUi(QDialog *PlayerNamesDialog)
     {
-        PlayerNamesDialog->setWindowTitle(QCoreApplication::translate("PlayerNamesDialog", "Dialog", nullptr));
+        PlayerNamesDialog->setWindowTitle(QCoreApplication::translate("PlayerNamesDialog", "Player Names", nullptr));
+        label->setText(QCoreApplication::translate("PlayerNamesDialog", "Enter a name for each player", nullptr));
     } // retranslateUi
 
 };

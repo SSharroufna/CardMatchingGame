@@ -13,13 +13,14 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -43,11 +44,13 @@ public:
     QGroupBox *playerBox;
     QLabel *gameStatusDisplay;
     QGroupBox *scoreboardBox;
-    QListWidget *scoreboardList;
+    QTableWidget *scoreboardTable;
     QGroupBox *boosterBox;
     QPushButton *startTurnBtn;
     QPushButton *boosterBtn;
     QLabel *timeUp;
+    QGroupBox *matchesBox;
+    QLabel *matchesLabel;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -55,7 +58,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(1342, 829);
+        MainWindow->resize(1342, 836);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         scene = new QGraphicsView(centralwidget);
@@ -63,13 +66,13 @@ public:
         scene->setGeometry(QRect(260, 20, 821, 701));
         startGameBtn = new QPushButton(centralwidget);
         startGameBtn->setObjectName("startGameBtn");
-        startGameBtn->setGeometry(QRect(129, 580, 91, 32));
+        startGameBtn->setGeometry(QRect(129, 500, 91, 32));
         newGameBtn = new QPushButton(centralwidget);
         newGameBtn->setObjectName("newGameBtn");
-        newGameBtn->setGeometry(QRect(20, 580, 91, 32));
+        newGameBtn->setGeometry(QRect(20, 500, 91, 32));
         timerLabel = new QLabel(centralwidget);
         timerLabel->setObjectName("timerLabel");
-        timerLabel->setGeometry(QRect(1100, 170, 101, 51));
+        timerLabel->setGeometry(QRect(1110, 165, 101, 51));
         QFont font;
         font.setPointSize(35);
         font.setBold(true);
@@ -77,13 +80,13 @@ public:
         timerLabel->setFont(font);
         quitGameBtn = new QPushButton(centralwidget);
         quitGameBtn->setObjectName("quitGameBtn");
-        quitGameBtn->setGeometry(QRect(20, 610, 201, 32));
+        quitGameBtn->setGeometry(QRect(20, 530, 201, 32));
         timerDisplay = new QLCDNumber(centralwidget);
         timerDisplay->setObjectName("timerDisplay");
-        timerDisplay->setGeometry(QRect(1210, 170, 101, 51));
+        timerDisplay->setGeometry(QRect(1220, 165, 101, 51));
         difficultyBox = new QGroupBox(centralwidget);
         difficultyBox->setObjectName("difficultyBox");
-        difficultyBox->setGeometry(QRect(20, 110, 201, 80));
+        difficultyBox->setGeometry(QRect(20, 170, 201, 80));
         QFont font1;
         font1.setPointSize(25);
         font1.setBold(true);
@@ -103,7 +106,7 @@ public:
         difficultyLabel->setAlignment(Qt::AlignCenter);
         movesBox = new QGroupBox(centralwidget);
         movesBox->setObjectName("movesBox");
-        movesBox->setGeometry(QRect(1110, 260, 191, 80));
+        movesBox->setGeometry(QRect(1120, 425, 191, 80));
         movesBox->setFont(font1);
         movesBox->setAlignment(Qt::AlignCenter);
         moves_label = new QLabel(movesBox);
@@ -113,7 +116,7 @@ public:
         moves_label->setAlignment(Qt::AlignCenter);
         scoreBox = new QGroupBox(centralwidget);
         scoreBox->setObjectName("scoreBox");
-        scoreBox->setGeometry(QRect(1110, 350, 191, 80));
+        scoreBox->setGeometry(QRect(1120, 265, 191, 80));
         scoreBox->setFont(font1);
         scoreBox->setAlignment(Qt::AlignCenter);
         score_label = new QLabel(scoreBox);
@@ -123,7 +126,7 @@ public:
         score_label->setAlignment(Qt::AlignCenter);
         playerBox = new QGroupBox(centralwidget);
         playerBox->setObjectName("playerBox");
-        playerBox->setGeometry(QRect(1110, 60, 191, 80));
+        playerBox->setGeometry(QRect(1120, 55, 191, 80));
         playerBox->setFont(font1);
         playerBox->setAlignment(Qt::AlignCenter);
         gameStatusDisplay = new QLabel(playerBox);
@@ -133,29 +136,28 @@ public:
         gameStatusDisplay->setAlignment(Qt::AlignCenter);
         scoreboardBox = new QGroupBox(centralwidget);
         scoreboardBox->setObjectName("scoreboardBox");
-        scoreboardBox->setGeometry(QRect(20, 220, 201, 211));
+        scoreboardBox->setGeometry(QRect(20, 280, 201, 181));
         scoreboardBox->setFont(font1);
         scoreboardBox->setAutoFillBackground(true);
         scoreboardBox->setAlignment(Qt::AlignCenter);
         scoreboardBox->setFlat(false);
-        scoreboardList = new QListWidget(scoreboardBox);
-        scoreboardList->setObjectName("scoreboardList");
-        scoreboardList->setGeometry(QRect(0, 34, 201, 181));
-        scoreboardList->setSortingEnabled(true);
+        scoreboardTable = new QTableWidget(scoreboardBox);
+        scoreboardTable->setObjectName("scoreboardTable");
+        scoreboardTable->setGeometry(QRect(0, 35, 201, 151));
         boosterBox = new QGroupBox(centralwidget);
         boosterBox->setObjectName("boosterBox");
-        boosterBox->setGeometry(QRect(1110, 460, 191, 80));
+        boosterBox->setGeometry(QRect(1120, 505, 191, 80));
         boosterBox->setFont(font1);
         boosterBox->setAlignment(Qt::AlignCenter);
         startTurnBtn = new QPushButton(centralwidget);
         startTurnBtn->setObjectName("startTurnBtn");
-        startTurnBtn->setGeometry(QRect(1110, 610, 191, 32));
+        startTurnBtn->setGeometry(QRect(1120, 655, 191, 32));
         boosterBtn = new QPushButton(centralwidget);
         boosterBtn->setObjectName("boosterBtn");
-        boosterBtn->setGeometry(QRect(1149, 560, 111, 32));
+        boosterBtn->setGeometry(QRect(1159, 605, 111, 32));
         timeUp = new QLabel(centralwidget);
         timeUp->setObjectName("timeUp");
-        timeUp->setGeometry(QRect(1120, 230, 171, 31));
+        timeUp->setGeometry(QRect(1130, 225, 171, 31));
         QFont font3;
         font3.setPointSize(28);
         font3.setBold(true);
@@ -163,6 +165,16 @@ public:
         font3.setUnderline(true);
         timeUp->setFont(font3);
         timeUp->setAlignment(Qt::AlignCenter);
+        matchesBox = new QGroupBox(centralwidget);
+        matchesBox->setObjectName("matchesBox");
+        matchesBox->setGeometry(QRect(1120, 345, 191, 80));
+        matchesBox->setFont(font1);
+        matchesBox->setAlignment(Qt::AlignCenter);
+        matchesLabel = new QLabel(matchesBox);
+        matchesLabel->setObjectName("matchesLabel");
+        matchesLabel->setGeometry(QRect(0, 35, 191, 42));
+        matchesLabel->setFont(font1);
+        matchesLabel->setAlignment(Qt::AlignCenter);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -197,6 +209,8 @@ public:
         startTurnBtn->setText(QCoreApplication::translate("MainWindow", "Start Turn", nullptr));
         boosterBtn->setText(QCoreApplication::translate("MainWindow", "Use Booster", nullptr));
         timeUp->setText(QCoreApplication::translate("MainWindow", "TIME'S UP!", nullptr));
+        matchesBox->setTitle(QCoreApplication::translate("MainWindow", "Matches", nullptr));
+        matchesLabel->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
     } // retranslateUi
 
 };

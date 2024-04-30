@@ -8,25 +8,26 @@ class Player
 {
 public:
     // Constructor
-    Player(QString playerName) : name(playerName), score(0), matchedPairs(0), turns(0) {}
+    Player(QString playerName) : name(playerName), score(0), matchedPairs(0), moves(0) {}
 
     // Getters
     QString getName() const { return name; }
     int getScore() const { return score; }
     int getMatchedPairs() const { return matchedPairs; }
-    int getTurns() const { return turns; }
+    int getMoves() const { return moves; }
+
 
     // Methods
     void increaseScore(int points) { score += points; }
     void incrementMatchedPairs() { matchedPairs++; }
-    void incrementTurns() { turns++; }
-    void reset() { score = 0; matchedPairs = 0; turns = 0; }
+    void incrementMoves() { moves++; }
+    void reset() { score = 0; matchedPairs = 0; moves = 0; }
 
 private:
     QString name;
     int score;
     int matchedPairs;
-    int turns;
+    int moves;
 
 };
 
