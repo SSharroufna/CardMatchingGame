@@ -4,6 +4,7 @@
 #include "numplayersdialog.h"
 #include "playernamesdialog.h"
 #include "player.h"
+#include "cardprototype.h"
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -35,15 +36,14 @@ private slots:
     void populateSceneWithCards();
 
     void on_startGameBtn_clicked();
-
     void on_startTurnBtn_clicked();
-
     void on_quitGameBtn_clicked();
 
 private:
     CardPrototypeFactory cardFactory;
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+     QGraphicsView *view;
     QVector<QGraphicsPixmapItem*> cards;
     int gameDifficulty;
 
@@ -56,13 +56,11 @@ private:
     QLCDNumber *lcdNumber;
     int countdownValue = 10;
 
-
     // a map to associate each card item with its card type
     QMap<QGraphicsPixmapItem*, CardPrototypeFactory::CardType> cardTypesMap;
-
-    // Declare a map to associate each card item with its card back item
-    QMap<QGraphicsPixmapItem*, QGraphicsPixmapItem*> cardBacks;
-
+    QString cardTypeToString(CardPrototypeFactory::CardType cardType) const;
+    QList<QGraphicsItem*> selectedItems;
 
 };
+
 #endif // MAINWINDOW_H

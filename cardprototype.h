@@ -3,41 +3,65 @@
 
 #include <QWidget>
 #include <QPixmap>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsSceneMouseEvent>
 
-// Abstract base class representing the prototype interface
 class CardPrototype : public QWidget {
 public:
     CardPrototype(QWidget *parent = nullptr) : QWidget(parent) {}
     virtual ~CardPrototype() {}
+
     virtual CardPrototype* clone() const = 0;
     virtual const QPixmap& image() const = 0;
-    // Add other methods as needed
 };
 
-// Concrete prototype class representing a specific type of card
-class Card : public CardPrototype {
+// prototype class representing a specific type of card
+class Card : public QGraphicsPixmapItem, public CardPrototype {
 public:
-    Card(const QPixmap& image) : image_(image) {}
+    Card(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
+        : QGraphicsPixmapItem(backImage, parent), frontImage_(frontImage), backImage_(backImage), flipped_(false) {}
 
-    virtual ~Card() {}
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
+        qDebug() << "Mouse pressed on card!";
+        toggle();
+    }
 
     CardPrototype* clone() const override {
-        return new Card(image_);
+        return new Card(frontImage_, backImage_);
     }
 
     const QPixmap& image() const override {
-        return image_;
+        return flipped_ ? backImage_ : frontImage_;
     }
 
+    void toggle() {
+        qDebug() << "Toggling card!";
+        if (!flipped_) {
+            setPixmap(frontImage_);
+        } else {
+            setPixmap(backImage_);
+        }
+        flipped_ = !flipped_;
+
+        // Ensure that mouse events are consumed after toggling
+       //setAcceptHoverEvents(flipped_);
+       //setAcceptedMouseButtons(flipped_ ? Qt::NoButton : Qt::LeftButton);
+    }
+
+    const QPixmap& frontImage() const { return frontImage_; }
+    const QPixmap& backImage() const { return backImage_; }
 private:
-    QPixmap image_;
+    QPixmap frontImage_;
+    QPixmap backImage_;
+    bool flipped_;
 };
 
-// Prototype factory class responsible for managing prototype objects
+// class for other cards Joker, Looker
+
+// Prototype factory class for creating prototype objects
 class CardPrototypeFactory {
 public:
     enum CardType {
-        // Define different types of cards
         computer,
         boy,
         openBox,

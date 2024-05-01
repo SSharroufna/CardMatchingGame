@@ -18,11 +18,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle("Card Match");
 
-
     //Dialog to enter number of players
     NumPlayersDialog numPlayers;
     numPlayers.exec();
-
 
     //Dialog for players to input names
     PlayerNamesDialog playerNamesDialog(this, numPlayers.getNumPlayers());
@@ -81,7 +79,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Setting up the graphics view and scene
     scene = new QGraphicsScene(this);
     ui->scene->setScene(scene);
-    //setCentralWidget(scene);
 
     populateSceneWithCards();
 
@@ -94,8 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
     // connect(ui->startGameBtn, &QAbstractButton::pressed, this, &MainWindow::startBtn_clicked);
 
-
-
+    selectedItems = scene->selectedItems();
 }
 
 MainWindow::~MainWindow()
@@ -103,55 +99,81 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::handleCardClick()
-{
+void MainWindow::handleCardClick() {
     qDebug() << "Card clicked!";
 
+    // Collect all selected items
+    foreach (QGraphicsItem* item, scene->selectedItems()) {
+        QGraphicsPixmapItem *pixmapItem = qgraphicsitem_cast<QGraphicsPixmapItem*>(item);
+        if (pixmapItem) {
+            selectedItems.append(pixmapItem);
+        }
+    }
 
-    // Get the selected items
-    QList<QGraphicsItem*> selectedItems = scene->selectedItems();
+    qDebug() << "Number of selected items:" << selectedItems.size();
 
-    // If exactly one item is selected
     if (selectedItems.size() == 2) {
         qDebug() << "Two cards chosen!";
 
-        QGraphicsPixmapItem *firstCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(0));
-        QGraphicsPixmapItem *secondCard = qgraphicsitem_cast<QGraphicsPixmapItem*>(selectedItems.at(1));
+        // Retrieve the front images of the selected cards
+        Card *firstCard = dynamic_cast<Card*>(selectedItems.at(0));
+        Card *secondCard = dynamic_cast<Card*>(selectedItems.at(1));
 
-        if (firstCard && secondCard) {
-            // Handle the selection of the two cards
+        // Retrieve the card types of the selected cards
+        CardPrototypeFactory::CardType firstCardType = cardTypesMap[firstCard];
+        CardPrototypeFactory::CardType secondCardType = cardTypesMap[secondCard];
+
+        qDebug() << "First card type:" << cardTypeToString(firstCardType);
+        qDebug() << "Second card type:" << cardTypeToString(secondCardType);
+
+        // Check if the cards are different and have the same type
+        if (firstCard != secondCard && firstCardType == secondCardType) {
+            qDebug() << "Matching cards!";
+            //players[currPlayerIndex].incrementMatchedPairs();
+
+            // Remove the matching cards from the scene
+            scene->removeItem(firstCard);
+            scene->removeItem(secondCard);
+
+        } else {
+            qDebug() << "Non-matching cards!";
+
+            // Close the cards, after a delay?
+            for (QGraphicsItem* item : selectedItems) {
+                Card* card = dynamic_cast<Card*>(item);
+                if (card) {
+                    card->toggle();
+                }
+            }
         }
-
+        selectedItems.clear();
     }
 }
+
 
 void MainWindow::populateSceneWithCards() {
 
     QVector<CardPrototypeFactory::CardType> cardTypes = {
          CardPrototypeFactory::boy,
-        CardPrototypeFactory::computer,
-          CardPrototypeFactory::openBox,
-          CardPrototypeFactory::closedBox,
-          CardPrototypeFactory::target,
-          CardPrototypeFactory::gem,
-           CardPrototypeFactory::board,
-           CardPrototypeFactory::piano,
-          CardPrototypeFactory::bag,
-          CardPrototypeFactory::speaker,
-          CardPrototypeFactory::game,
-          CardPrototypeFactory::clock,
-          CardPrototypeFactory::map
+         CardPrototypeFactory::computer,
+         CardPrototypeFactory::openBox,
+         CardPrototypeFactory::closedBox,
+         CardPrototypeFactory::target,
+         CardPrototypeFactory::gem,
+         CardPrototypeFactory::board,
+         CardPrototypeFactory::piano,
+         CardPrototypeFactory::bag,
+         CardPrototypeFactory::speaker,
+         CardPrototypeFactory::game,
+         CardPrototypeFactory::clock,
+         CardPrototypeFactory::map
         };
 
-
-    // Resize the card types vector to contain half the number of cards you want
+    // Resize the card types vector to contain half the number of cards
     cardTypes.resize(36 / 2);
 
     // Duplicate the card types to ensure each card has a pair
     cardTypes += cardTypes;
-
-    // Load the card back image
-    QPixmap cardBackImage("/Users/sarah/Downloads/images/back.png");
 
     // Populate the scene with cards
     for (int i = 0; i < 6; ++i) {
@@ -160,35 +182,24 @@ void MainWindow::populateSceneWithCards() {
                 int randomIndex = QRandomGenerator::global()->bounded(cardTypes.size());
 
                 // Use the prototype factory to create a new card prototype object
-                CardPrototype* cardPrototype = cardFactory.createPrototype(cardTypes[randomIndex]);
+                CardPrototype* cardPrototype = CardPrototypeFactory::createPrototype(cardTypes[randomIndex]);
 
-                // Clone the prototype to create a new card
-                CardPrototype* newCard = cardPrototype->clone();
+                // Cast the prototype to Card
+                Card* newCard = dynamic_cast<Card*>(cardPrototype);
 
-                QGraphicsPixmapItem *cardItem = new QGraphicsPixmapItem(newCard->image());
-                cardItem->setPos(i * 120, j * 110); // Position in the UI
-                cardItem->setFlag(QGraphicsItem::ItemIsSelectable);
-                cardItem->setScale(0.2);
-                cardItem->setZValue(0);
-                scene->addItem(cardItem);
-                cards.append(cardItem);
+                // Check if the cast was successful
+                if (newCard) {
+                    // Set up the card's position and properties
+                    newCard->setPos(i * 120, j * 110);
+                    newCard->setFlag(QGraphicsItem::ItemIsSelectable);
+                    newCard->setScale(0.2);
+                    newCard->setZValue(0);
 
-                // Store the card type for each card item
-                cardTypesMap.insert(cardItem, cardTypes[randomIndex]);
-
-
-                // // Create QGraphicsPixmapItem for the card back image
-                // QGraphicsPixmapItem *cardBackItem = new QGraphicsPixmapItem(cardBackImage);
-                // cardBackItem->setPos(i * 120, j * 110); // Position in the UI
-                // cardBackItem->setScale(0.2);
-                // cardBackItem->setZValue(1);
-                // scene->addItem(cardBackItem);
-
-                // // Associate the card item with its corresponding card back item
-                // cardBacks.insert(cardItem, cardBackItem);
-
-                // Clean up the prototype object
-                delete cardPrototype;
+                    // Add the card to the scene
+                    scene->addItem(newCard);
+                    // Store the card type for each card item
+                    cardTypesMap.insert(newCard, cardTypes[randomIndex]);
+                }
 
                 // Remove the used card type from the vector to avoid duplicates
                 cardTypes.remove(randomIndex);
@@ -196,8 +207,6 @@ void MainWindow::populateSceneWithCards() {
         }
     }
 }
-
-
 
 void MainWindow::on_startGameBtn_clicked(){
     ui->timeUp->setVisible(false);
@@ -216,8 +225,6 @@ void MainWindow::on_startGameBtn_clicked(){
     //Disable startGameBtn once game is initialized, for the rest of the game
     ui->startGameBtn->setEnabled(false);
 }
-
-
 
 void MainWindow::updateCountdown(){
     if (countdownValue >= 0){
@@ -242,7 +249,6 @@ void MainWindow::updateCountdown(){
     }
 }
 
-
 void MainWindow::on_startTurnBtn_clicked(){
     ui->timeUp->setVisible(false);
     qDebug() << "Start turn button clicked";
@@ -256,12 +262,40 @@ void MainWindow::on_startTurnBtn_clicked(){
     countdownTimer = new QTimer(this);
     connect(countdownTimer, &QTimer::timeout, this, &MainWindow::updateCountdown);
     countdownTimer->start(1000);
-
 }
-
 
 void MainWindow::on_quitGameBtn_clicked()
 {
     qDebug() << "Quit Button Clicked";
 }
 
+QString MainWindow::cardTypeToString(CardPrototypeFactory::CardType cardType) const {
+    switch(cardType) {
+    case CardPrototypeFactory::boy:
+        return "Boy";
+    case CardPrototypeFactory::computer:
+        return "Computer";
+    case CardPrototypeFactory::openBox:
+        return "Open Box";
+    case CardPrototypeFactory::clock:
+        return "Clock";
+    case CardPrototypeFactory::closedBox:
+        return "Close Box";
+    case CardPrototypeFactory::map:
+        return "Map";
+    case CardPrototypeFactory::target:
+        return "Target";
+    case CardPrototypeFactory::gem:
+        return "Gem";
+    case CardPrototypeFactory::piano:
+        return "Piano";
+    case CardPrototypeFactory::board:
+        return "Board";
+    case CardPrototypeFactory::speaker:
+        return "Speaker";
+    case CardPrototypeFactory::game:
+        return "Game";
+    default:
+        return "Unknown";
+    }
+}

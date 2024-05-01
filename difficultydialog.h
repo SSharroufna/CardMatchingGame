@@ -21,11 +21,8 @@ public:
 
 private slots:
     void on_beginnerButton_clicked();
-
     void on_intermediateButton_clicked();
-
     void on_expertButton_clicked();
-
     void on_buttonBox_accepted();
 
 private:

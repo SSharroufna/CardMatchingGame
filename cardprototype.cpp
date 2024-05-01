@@ -1,34 +1,35 @@
 #include "cardprototype.h"
+#include <QGraphicsSceneMouseEvent>
 
-// Prototype factory class responsible for managing prototype objects
+// Prototype factory class responsible for creating prototype objects
 CardPrototype* CardPrototypeFactory::createPrototype(CardType type) {
     switch (type) {
     case computer:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card13.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card13.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case boy:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card1.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card1.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case openBox:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card3.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card3.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case target:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card4.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card4.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case map:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card5.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card5.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case game:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card6.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card6.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case clock:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card7.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card7.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case speaker:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card2.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card2.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case bag:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card12.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card12.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case board:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card11.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card11.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case piano:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card10.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card10.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case closedBox:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card9.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card9.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case gem:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card8.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card8.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     default:
         return nullptr;
     }
