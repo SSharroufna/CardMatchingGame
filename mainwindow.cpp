@@ -10,6 +10,8 @@
 #include <QTime>
 #include <algorithm> // Include for std::shuffle
 #include <random>    // Include for std::mt19937
+#include <QTableWidgetItem>
+#include <QtWidgets>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -67,9 +69,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     //Display stuff
-    ui->scoreboardList->setStyleSheet("border-top-left-radius : 5px;" "border-top-right-radius : 5px;"
-                                   "border-bottom-left-radius : 5px;" "border-bottom-right-radius : 5px;");
-
     ui->timeUp->setVisible(false);
     ui->timeUp->setStyleSheet("color : red");
 
@@ -87,6 +86,24 @@ MainWindow::MainWindow(QWidget *parent)
     ui->startTurnBtn->setEnabled(false);
     ui->boosterBtn->setEnabled(false);
 
+    //Set up scoreboard
+    ui->scoreboardTable->setStyleSheet("color : white;" "background-color: rgb(89, 46, 143);" "border-top-left-radius : 5px;"
+                                       "border-top-right-radius : 5px;" "border-bottom-left-radius : 5px;" "border-bottom-right-radius : 5px;");
+    ui->scoreboardTable->setRowCount(players.size());
+    ui->scoreboardTable->setColumnCount(2);
+    ui->scoreboardTable->setColumnWidth(0, 144);
+    ui->scoreboardTable->horizontalHeader()->hide();
+
+    for (int i = 0; i < players.size(); i++){
+        ui->scoreboardTable->setItem(i, 0, new QTableWidgetItem(players[i].getName()));
+        ui->scoreboardTable->setItem(i, 1, new QTableWidgetItem(players[i].getScore()));
+    }
+
+    //Sorts the table and puts the person with the highest score at the top
+    Qt::SortOrder order = Qt::DescendingOrder;
+    ui->scoreboardTable->sortItems(1, order);
+    ui->scoreboardTable->resizeColumnToContents(1);
+
     //Connect signals and slots
     connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
     // connect(ui->startGameBtn, &QAbstractButton::pressed, this, &MainWindow::startBtn_clicked);
@@ -99,7 +116,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::handleCardClick() {
+void MainWindow::handleCardClick()
+{
     qDebug() << "Card clicked!";
 
     // Collect all selected items
@@ -145,9 +163,17 @@ void MainWindow::handleCardClick() {
                     card->toggle();
                 }
             }
+
+        //Increment moves made for player, not sure if we want to increment
+        //per card chosen or per pair chosen
+        //players[currPlayerIndex].incrementMoves();
         }
         selectedItems.clear();
     }
+
+    //update moves label on board each time player makes a move
+    QString strNum = QString::number(players[currPlayerIndex].getMoves());
+    ui->moves_label->setText(strNum);
 }
 
 
