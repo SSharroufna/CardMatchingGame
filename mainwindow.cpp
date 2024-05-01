@@ -119,6 +119,9 @@ MainWindow::~MainWindow()
 void MainWindow::handleCardClick()
 {
     qDebug() << "Card clicked!";
+    //Increment moves made for player, not sure if we want to increment
+    //per card chosen or per pair chosen
+    players[currPlayerIndex].incrementMoves();
 
     // Collect all selected items
     foreach (QGraphicsItem* item, scene->selectedItems()) {
@@ -147,7 +150,7 @@ void MainWindow::handleCardClick()
         // Check if the cards are different and have the same type
         if (firstCard != secondCard && firstCardType == secondCardType) {
             qDebug() << "Matching cards!";
-            //players[currPlayerIndex].incrementMatchedPairs();
+            players[currPlayerIndex].incrementMatchedPairs();
 
             // Remove the matching cards from the scene
             scene->removeItem(firstCard);
@@ -163,10 +166,6 @@ void MainWindow::handleCardClick()
                     card->toggle();
                 }
             }
-
-        //Increment moves made for player, not sure if we want to increment
-        //per card chosen or per pair chosen
-        //players[currPlayerIndex].incrementMoves();
         }
         selectedItems.clear();
     }
@@ -174,6 +173,10 @@ void MainWindow::handleCardClick()
     //update moves label on board each time player makes a move
     QString strNum = QString::number(players[currPlayerIndex].getMoves());
     ui->moves_label->setText(strNum);
+
+    //update moves label on board each time player makes a move
+    QString scoreNum = QString::number(players[currPlayerIndex].getMatchedPairs()/2);
+    ui->matchesLabel->setText(scoreNum);
 }
 
 
