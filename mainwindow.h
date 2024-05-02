@@ -39,11 +39,14 @@ private slots:
     void on_startTurnBtn_clicked();
     void on_quitGameBtn_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     CardPrototypeFactory cardFactory;
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
-     QGraphicsView *view;
+     QGraphicsScene *boosterScene;
+
     QVector<QGraphicsPixmapItem*> cards;
     int gameDifficulty;
 

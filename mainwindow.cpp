@@ -75,9 +75,13 @@ MainWindow::MainWindow(QWidget *parent)
     //Initialize currPlayerIndex
     currPlayerIndex = 0;
 
-    // Setting up the graphics view and scene
+    // Setting up the graphics scene
     scene = new QGraphicsScene(this);
     ui->scene->setScene(scene);
+
+    // Setting up the Booster scene
+    boosterScene = new QGraphicsScene(this);
+    ui->boosterScene->setScene(boosterScene);
 
     populateSceneWithCards();
 
@@ -108,7 +112,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
     // connect(ui->startGameBtn, &QAbstractButton::pressed, this, &MainWindow::startBtn_clicked);
 
-    selectedItems = scene->selectedItems();
 }
 
 MainWindow::~MainWindow()
@@ -119,13 +122,14 @@ MainWindow::~MainWindow()
 void MainWindow::handleCardClick()
 {
     qDebug() << "Card clicked!";
+
     //Increment moves made for player, not sure if we want to increment
     //per card chosen or per pair chosen
     players[currPlayerIndex].incrementMoves();
 
     // Collect all selected items
     foreach (QGraphicsItem* item, scene->selectedItems()) {
-        QGraphicsPixmapItem *pixmapItem = qgraphicsitem_cast<QGraphicsPixmapItem*>(item);
+        Card* pixmapItem = dynamic_cast<Card*>(item);
         if (pixmapItem) {
             selectedItems.append(pixmapItem);
         }
@@ -134,7 +138,7 @@ void MainWindow::handleCardClick()
     qDebug() << "Number of selected items:" << selectedItems.size();
 
     if (selectedItems.size() == 2) {
-        qDebug() << "Two cards chosen!";
+        //qDebug() << "Two cards chosen!";
 
         // Retrieve the front images of the selected cards
         Card *firstCard = dynamic_cast<Card*>(selectedItems.at(0));
@@ -144,29 +148,27 @@ void MainWindow::handleCardClick()
         CardPrototypeFactory::CardType firstCardType = cardTypesMap[firstCard];
         CardPrototypeFactory::CardType secondCardType = cardTypesMap[secondCard];
 
-        qDebug() << "First card type:" << cardTypeToString(firstCardType);
-        qDebug() << "Second card type:" << cardTypeToString(secondCardType);
-
         // Check if the cards are different and have the same type
         if (firstCard != secondCard && firstCardType == secondCardType) {
             qDebug() << "Matching cards!";
             players[currPlayerIndex].incrementMatchedPairs();
 
-            // Remove the matching cards from the scene
+            // Remove the matching pair from the scene
             scene->removeItem(firstCard);
             scene->removeItem(secondCard);
 
         } else {
-            qDebug() << "Non-matching cards!";
+           //qDebug() << "Non-matching cards!";
 
             // Close the cards, after a delay?
             for (QGraphicsItem* item : selectedItems) {
                 Card* card = dynamic_cast<Card*>(item);
                 if (card) {
-                    card->toggle();
+                    card->toggle(); //toggling cards
                 }
             }
         }
+
         selectedItems.clear();
     }
 
@@ -178,7 +180,6 @@ void MainWindow::handleCardClick()
     QString scoreNum = QString::number(players[currPlayerIndex].getMatchedPairs()/2);
     ui->matchesLabel->setText(scoreNum);
 }
-
 
 void MainWindow::populateSceneWithCards() {
 
@@ -211,7 +212,7 @@ void MainWindow::populateSceneWithCards() {
                 int randomIndex = QRandomGenerator::global()->bounded(cardTypes.size());
 
                 // Use the prototype factory to create a new card prototype object
-                CardPrototype* cardPrototype = CardPrototypeFactory::createPrototype(cardTypes[randomIndex]);
+                Card* cardPrototype = CardPrototypeFactory::createPrototype(cardTypes[randomIndex]);
 
                 // Cast the prototype to Card
                 Card* newCard = dynamic_cast<Card*>(cardPrototype);
@@ -235,6 +236,17 @@ void MainWindow::populateSceneWithCards() {
             }
         }
     }
+    Card* glancerCard = CardPrototypeFactory::createPrototype(CardPrototypeFactory::glancer);
+    glancerCard->setScale(0.2);
+    glancerCard->setPos(0 * 120, 0 * 110);
+    boosterScene->addItem(glancerCard);
+
+
+    Card* doubleCard = CardPrototypeFactory::createPrototype(CardPrototypeFactory::doublePoint);
+    doubleCard->setScale(0.2);
+    glancerCard->setPos(1 * 120, 0 * 110);
+    boosterScene->addItem(doubleCard);
+
 }
 
 void MainWindow::on_startGameBtn_clicked(){
@@ -328,3 +340,25 @@ QString MainWindow::cardTypeToString(CardPrototypeFactory::CardType cardType) co
         return "Unknown";
     }
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    qDebug() << "Refresh Button Clicked";
+
+    QList<QGraphicsItem*> items = scene->items();
+    for (QGraphicsItem* item : items) {
+        if (!item->isSelected()) {
+            item->setSelected(true);
+        }
+    }
+
+    for (QGraphicsItem* item : items) {
+        Card* card = dynamic_cast<Card*>(item);
+        if (card && card->isFlipped()) {
+            card->toggle();
+        }
+    }
+
+    selectedItems.clear();
+}
+

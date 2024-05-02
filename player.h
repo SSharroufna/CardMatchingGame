@@ -16,6 +16,9 @@ public:
     int getMatchedPairs() const { return matchedPairs; }
     int getMoves() const { return moves; }
 
+    //Setters
+    void setMoves(int value) { moves=value;}
+
 
     // Methods
     void increaseScore(int points) { score += points; }

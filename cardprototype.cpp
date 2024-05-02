@@ -2,7 +2,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 // Prototype factory class responsible for creating prototype objects
-CardPrototype* CardPrototypeFactory::createPrototype(CardType type) {
+Card* CardPrototypeFactory::createPrototype(CardType type) {
     switch (type) {
     case computer:
         return new Card(QPixmap("/Users/sarah/Downloads/images/card13.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
@@ -30,6 +30,12 @@ CardPrototype* CardPrototypeFactory::createPrototype(CardType type) {
         return new Card(QPixmap("/Users/sarah/Downloads/images/card9.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case gem:
         return new Card(QPixmap("/Users/sarah/Downloads/images/card8.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
+    case extraTime:
+        return new Card(QPixmap("/Users/sarah/Downloads/images/card1.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
+    case doublePoint:
+        return new Card(QPixmap("/Users/sarah/Downloads/images/double.png"), QPixmap("/Users/sarah/Downloads/images/double.png"));
+    case glancer:
+        return new Card(QPixmap("/Users/sarah/Downloads/images/glancer.png"), QPixmap("/Users/sarah/Downloads/images/glancer.png"));
     default:
         return nullptr;
     }

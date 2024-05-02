@@ -15,50 +15,88 @@ public:
     virtual const QPixmap& image() const = 0;
 };
 
-// prototype class representing a specific type of card
-class Card : public QGraphicsPixmapItem, public CardPrototype {
+// Regular Cards
+class Card : public QGraphicsPixmapItem {
 public:
     Card(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
         : QGraphicsPixmapItem(backImage, parent), frontImage_(frontImage), backImage_(backImage), flipped_(false) {}
 
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
-        qDebug() << "Mouse pressed on card!";
         toggle();
     }
 
-    CardPrototype* clone() const override {
-        return new Card(frontImage_, backImage_);
-    }
-
-    const QPixmap& image() const override {
+    const QPixmap& image() const  {
         return flipped_ ? backImage_ : frontImage_;
     }
 
+    bool isFlipped() const {
+        return flipped_;
+    }
+
     void toggle() {
-        qDebug() << "Toggling card!";
         if (!flipped_) {
             setPixmap(frontImage_);
         } else {
             setPixmap(backImage_);
         }
         flipped_ = !flipped_;
+    }
 
-        // Ensure that mouse events are consumed after toggling
-       //setAcceptHoverEvents(flipped_);
-       //setAcceptedMouseButtons(flipped_ ? Qt::NoButton : Qt::LeftButton);
+    virtual int points() const {
+        return 5;
     }
 
     const QPixmap& frontImage() const { return frontImage_; }
     const QPixmap& backImage() const { return backImage_; }
+
 private:
     QPixmap frontImage_;
     QPixmap backImage_;
     bool flipped_;
 };
 
-// class for other cards Joker, Looker
+// Special booster card representing "Glancer"
+class GlancerCard : public Card {
+public:
+    GlancerCard(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
+        : Card(frontImage, backImage, parent) {}
 
-// Prototype factory class for creating prototype objects
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
+
+    }
+};
+
+// Special booster card "Double Point"
+class DoublePointCard : public Card {
+public:
+    DoublePointCard(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
+        : Card(frontImage, backImage, parent) {}
+
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
+        // Implement logic for Double Point card
+        // For example, increase the point multiplier
+        // This logic is specific to your game design
+    }
+
+    int points() const override {
+        return Card::points() * 2;
+    }
+};
+
+// Special booster card "Extra Time"
+class ExtraTimeCard : public Card {
+public:
+    ExtraTimeCard(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
+        : Card(frontImage, backImage, parent) {}
+
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
+        // Implement logic for Extra Time card
+        // For example, add extra time to the player's timer
+        // This logic is specific to your game design
+    }
+};
+
+// Card factory class for creating prototype objects
 class CardPrototypeFactory {
 public:
     enum CardType {
@@ -74,10 +112,13 @@ public:
         speaker,
         game,
         clock,
-        map
+        map,
+        doublePoint,
+        extraTime,
+        glancer,
     };
 
-    static CardPrototype* createPrototype(CardType type);
+    static Card* createPrototype(CardType type);
 };
 
 #endif // CARDPROTOTYPE_HPP
