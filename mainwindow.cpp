@@ -102,15 +102,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->scoreboardTable->setColumnWidth(0, 144);
     ui->scoreboardTable->horizontalHeader()->hide();
 
-    for (int i = 0; i < players.size(); i++){
-        ui->scoreboardTable->setItem(i, 0, new QTableWidgetItem(players[i].getName()));
-        ui->scoreboardTable->setItem(i, 1, new QTableWidgetItem(players[i].getScore()));
-    }
-
-    //Sorts the table and puts the person with the highest score at the top
-    Qt::SortOrder order = Qt::DescendingOrder;
-    ui->scoreboardTable->sortItems(1, order);
-    ui->scoreboardTable->resizeColumnToContents(1);
+    updateScoreboard();
 
     //Connect signals and slots
     connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
@@ -122,12 +114,50 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+// Slot implementation in MainWindow
+void MainWindow::on_timerCardDoubleClicked() {
+    qDebug() << "Extra time card double clicked";
+    // Add 10 seconds to the countdown timer
+    countdownValue += 10;
+    // Update the countdown display if necessary
+    lcdNumber->display(countdownValue);
+}
+
+void MainWindow::updateScoreboard(){
+
+    for (int i = 0; i < players.size(); i++){
+        ui->scoreboardTable->setItem(i, 0, new QTableWidgetItem(players[i].getName()));
+        ui->scoreboardTable->setItem(i, 1, new QTableWidgetItem(players[i].getScore()));
+    }
+
+    //Sorts the table and puts the person with the highest score at the top
+    Qt::SortOrder order = Qt::DescendingOrder;
+    ui->scoreboardTable->sortItems(1, order);
+    ui->scoreboardTable->resizeColumnToContents(1);
+}
+
+void MainWindow::updateUserData(){
+    //set matched pair
+    players[currPlayerIndex].setMatchedPair(players[currPlayerIndex].getMatchedPairs());
+    QString strPair = QString::number(players[currPlayerIndex].getMatchedPairs());
+    ui->matchesLabel->setText(strPair);
+
+    //set moves
+     players[currPlayerIndex].setMoves(players[currPlayerIndex].getMoves());
+    QString strMoves = QString::number(players[currPlayerIndex].getMoves()/2);
+    ui->moves_label->setText(strMoves);
+
+     //set score
+     players[currPlayerIndex].setScore(players[currPlayerIndex].getScore());
+    QString strScore = QString::number(players[currPlayerIndex].getScore());
+    ui->score_label->setText(strScore);
+}
+
 void MainWindow::handleCardClick()
 {
     qDebug() << "Card clicked!";
 
-    //Increment moves made for player, not sure if we want to increment
-    //per card chosen or per pair chosen
+    //Increment moves made for player per pair chosen
     players[currPlayerIndex].incrementMoves();
 
     // Collect the selected item on the scene
@@ -155,7 +185,11 @@ void MainWindow::handleCardClick()
         // Check if the cards are different and have the same type
         if (firstCard != secondCard && firstCardType == secondCardType) {
             qDebug() << "Matching cards!";
+            firstCard->setPoints(firstCard->points());
+            qDebug() << "firstCard point " << firstCard->points();
             players[currPlayerIndex].incrementMatchedPairs();
+            players[currPlayerIndex].increaseScore(firstCard->points() *2);
+            updateUserData();
 
             // Remove the matching pair from the scene
             QTimer::singleShot(500,this, [=]() { scene->removeItem(firstCard); });
@@ -169,13 +203,8 @@ void MainWindow::handleCardClick()
         selectedItems.clear();
     }
 
-    //update moves label on board each time player makes a move
-    QString strNum = QString::number(players[currPlayerIndex].getMoves());
-    ui->moves_label->setText(strNum);
-
-    //update moves label on board each time player makes a move
-    QString scoreNum = QString::number(players[currPlayerIndex].getMatchedPairs()/2);
-    ui->matchesLabel->setText(scoreNum);
+    updateUserData();
+    updateScoreboard();
 }
 
 void MainWindow::populateSceneWithCards() {
@@ -211,7 +240,7 @@ void MainWindow::populateSceneWithCards() {
                 int randomIndex = QRandomGenerator::global()->bounded(cardTypes.size());
 
                 // Use the prototype factory to create a new card prototype object
-                Card* cardPrototype = CardPrototypeFactory::createPrototype(cardTypes[randomIndex]);
+               Card* cardPrototype = CardPrototypeFactory::createPrototype(cardTypes[randomIndex]);
 
                 // Cast the prototype to Card
                 Card* newCard = dynamic_cast<Card*>(cardPrototype);
@@ -235,18 +264,23 @@ void MainWindow::populateSceneWithCards() {
         }
     }
 
-
     Card* glancerCard = CardPrototypeFactory::createPrototype(CardPrototypeFactory::glancer);
-    glancerCard->setScale(0.2);
+    glancerCard->setScale(0.15);
     glancerCard->setPos(0 * 120, 0 * 110);
     glancerCard->setFlag(QGraphicsItem::ItemIsSelectable);
     boosterScene->addItem(glancerCard);
 
     Card* doubleCard = CardPrototypeFactory::createPrototype(CardPrototypeFactory::doublePoint);
-    doubleCard->setScale(0.2);
-    doubleCard->setPos(1 * 120, 0 * 110);
+    doubleCard->setScale(0.15);
+    doubleCard->setPos(0.7 * 120, 0 * 110);
     doubleCard->setFlag(QGraphicsItem::ItemIsSelectable);
     boosterScene->addItem(doubleCard);
+
+    Card* extraTimeCard = CardPrototypeFactory::createPrototype(CardPrototypeFactory::extraTime);
+    extraTimeCard->setScale(0.15);
+    extraTimeCard->setPos(1.4 * 120, 0 * 110);
+    extraTimeCard->setFlag(QGraphicsItem::ItemIsSelectable);
+    boosterScene->addItem(extraTimeCard);
 }
 
 void MainWindow::on_startGameBtn_clicked(){
@@ -344,27 +378,6 @@ QString MainWindow::cardTypeToString(CardPrototypeFactory::CardType cardType) co
     }
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-    qDebug() << "Refresh Button Clicked";
-
-    QList<QGraphicsItem*> items = scene->items();
-    for (QGraphicsItem* item : items) {
-        if (!item->isSelected()) {
-            item->setSelected(true);
-        }
-    }
-
-    for (QGraphicsItem* item : items) {
-        Card* card = dynamic_cast<Card*>(item);
-        if (card && card->isFlipped()) {
-            card->toggle();
-        }
-    }
-
-    items.clear();
-}
-
 void MainWindow::disableAllCards(){
 
     QList<QGraphicsItem*> items = scene->items();
@@ -382,4 +395,5 @@ void MainWindow::disableAllCards(){
         }
     }
     items.clear();
+    selectedItems.clear();
 }

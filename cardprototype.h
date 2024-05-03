@@ -21,10 +21,6 @@ public:
     Card(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
         : QGraphicsPixmapItem(backImage, parent), frontImage_(frontImage), backImage_(backImage), flipped_(false) {}
 
-    // void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
-    //     toggle();
-    // }
-
     const QPixmap& image() const  {
         return flipped_ ? backImage_ : frontImage_;
     }
@@ -42,8 +38,11 @@ public:
         flipped_ = !flipped_;
     }
 
-    virtual int points() const {
-        return 5;
+    void setPoints(int points) { points_ = points; }
+    int points() const { return points_; }
+
+    virtual void activateEffect()  {
+        qDebug() << "Regular card has no effect";
     }
 
     const QPixmap& frontImage() const { return frontImage_; }
@@ -55,7 +54,7 @@ private:
     bool flipped_;
 
 protected:
-    int points_;
+    int points_ = 5;
 };
 
 // Special booster card representing "Glancer"
@@ -67,6 +66,7 @@ public:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override {
         qDebug() << "GlancerCard Activated";
     }
+
 };
 
 // Special booster card "Double Point"
@@ -75,15 +75,19 @@ public:
     DoublePointCard(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
         : Card(frontImage, backImage, parent) {}
 
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)  {
-
-        qDebug() << "DoublePointCard Activated";
-
-        points();
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override  {
+        qDebug() << "DoublePointCard double clicked";
+        activateEffect();
     }
 
-    int points() const override {
-        return Card::points() * 2;
+    void activateEffect()  override {
+        qDebug() << "DoublePointCard effect activated";
+        // // Double the points of the base card
+        // int currentPoints = points();
+        // int doubledPoints = currentPoints * 2;
+        // qDebug() << "Current points:" << currentPoints << ", Doubled points:" << doubledPoints;
+        // setPoints(doubledPoints);
+        // qDebug() << points();
     }
 };
 
@@ -93,8 +97,14 @@ public:
     ExtraTimeCard(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
         : Card(frontImage, backImage, parent) {}
 
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)  {
-      qDebug() << "ExtraTimeCard";
+signals:
+    void doubleClicked();
+
+protected:
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override {
+        qDebug() << "ExtraTimeCard double clicked";
+        // Emit the signal indicating the extra time card has been double-clicked
+        emit doubleClicked();
     }
 };
 

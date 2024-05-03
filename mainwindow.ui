@@ -372,19 +372,6 @@
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>1190</x>
-      <y>220</y>
-      <width>100</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Refresh</string>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="scoreBox">
     <property name="geometry">
      <rect>

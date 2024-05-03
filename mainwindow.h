@@ -30,6 +30,7 @@ public:
     ~MainWindow();
     void startBtn_clicked();
     void updateCountdown();
+    Ui::MainWindow *ui;
 
 private slots:
     void handleCardClick();
@@ -39,13 +40,15 @@ private slots:
     void on_startTurnBtn_clicked();
     void on_quitGameBtn_clicked();
 
-    void on_pushButton_clicked();
     void disableAllCards();
+    void updateScoreboard();
+    void updateUserData();
+
+    void on_timerCardDoubleClicked();
 
 private:
     //Scenes
     CardPrototypeFactory cardFactory;
-    Ui::MainWindow *ui;
     QGraphicsScene *scene;
     QGraphicsScene *boosterScene;
 

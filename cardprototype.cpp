@@ -31,7 +31,7 @@ Card* CardPrototypeFactory::createPrototype(CardType type) {
     case gem:
         return new Card(QPixmap("/Users/sarah/Downloads/images/card8.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case extraTime:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/card1.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
+        return new Card(QPixmap("/Users/sarah/Downloads/images/time.png"), QPixmap("/Users/sarah/Downloads/images/time.png"));
     case doublePoint:
         return new DoublePointCard(QPixmap("/Users/sarah/Downloads/images/double.png"), QPixmap("/Users/sarah/Downloads/images/double.png"));
     case glancer:
