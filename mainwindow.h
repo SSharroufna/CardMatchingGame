@@ -40,15 +40,18 @@ private slots:
     void on_quitGameBtn_clicked();
 
     void on_pushButton_clicked();
+    void disableAllCards();
 
 private:
+    //Scenes
     CardPrototypeFactory cardFactory;
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
-     QGraphicsScene *boosterScene;
+    QGraphicsScene *boosterScene;
 
-    QVector<QGraphicsPixmapItem*> cards;
+    //Games setting
     int gameDifficulty;
+    int numberOfCards;
 
     //Initializing players
     QVector<Player> players;
@@ -63,7 +66,6 @@ private:
     QMap<QGraphicsPixmapItem*, CardPrototypeFactory::CardType> cardTypesMap;
     QString cardTypeToString(CardPrototypeFactory::CardType cardType) const;
     QList<QGraphicsItem*> selectedItems;
-
 };
 
 #endif // MAINWINDOW_H

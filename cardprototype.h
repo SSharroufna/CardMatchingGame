@@ -21,9 +21,9 @@ public:
     Card(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
         : QGraphicsPixmapItem(backImage, parent), frontImage_(frontImage), backImage_(backImage), flipped_(false) {}
 
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
-        toggle();
-    }
+    // void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
+    //     toggle();
+    // }
 
     const QPixmap& image() const  {
         return flipped_ ? backImage_ : frontImage_;
@@ -53,6 +53,9 @@ private:
     QPixmap frontImage_;
     QPixmap backImage_;
     bool flipped_;
+
+protected:
+    int points_;
 };
 
 // Special booster card representing "Glancer"
@@ -61,8 +64,8 @@ public:
     GlancerCard(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
         : Card(frontImage, backImage, parent) {}
 
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
-
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override {
+        qDebug() << "GlancerCard Activated";
     }
 };
 
@@ -72,10 +75,11 @@ public:
     DoublePointCard(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
         : Card(frontImage, backImage, parent) {}
 
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
-        // Implement logic for Double Point card
-        // For example, increase the point multiplier
-        // This logic is specific to your game design
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)  {
+
+        qDebug() << "DoublePointCard Activated";
+
+        points();
     }
 
     int points() const override {
@@ -89,10 +93,8 @@ public:
     ExtraTimeCard(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
         : Card(frontImage, backImage, parent) {}
 
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
-        // Implement logic for Extra Time card
-        // For example, add extra time to the player's timer
-        // This logic is specific to your game design
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)  {
+      qDebug() << "ExtraTimeCard";
     }
 };
 

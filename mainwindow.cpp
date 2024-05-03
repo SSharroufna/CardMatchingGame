@@ -8,6 +8,7 @@
 #include <QDir>
 #include <QRandomGenerator>
 #include <QTime>
+#include <QTimer>
 #include <algorithm> // Include for std::shuffle
 #include <random>    // Include for std::mt19937
 #include <QTableWidgetItem>
@@ -51,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
             ui->difficultyLabel->setStyleSheet("background-color : green;"
                                                 "border-top-left-radius : 5px;" "border-top-right-radius : 5px;"
                                                "border-bottom-left-radius : 5px;" "border-bottom-right-radius : 5px;");
+            numberOfCards = 4;
             break;
         case 2:
             qDebug() << "Orange Box for Intermediate";;
@@ -58,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
             ui->difficultyLabel->setStyleSheet("background-color : orange;"
                                                "border-top-left-radius : 5px;" "border-top-right-radius : 5px;"
                                                "border-bottom-left-radius : 5px;" "border-bottom-right-radius : 5px;");
+            numberOfCards = 5;
             break;
         case 3:
             qDebug() << "Red Box for Expert";
@@ -65,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
             ui->difficultyLabel->setStyleSheet("background-color : red;"
                                                "border-top-left-radius : 5px;" "border-top-right-radius : 5px;"
                                                "border-bottom-left-radius : 5px;" "border-bottom-right-radius : 5px;");
+            numberOfCards = 6;
             break;
     }
 
@@ -111,7 +115,6 @@ MainWindow::MainWindow(QWidget *parent)
     //Connect signals and slots
     connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
     // connect(ui->startGameBtn, &QAbstractButton::pressed, this, &MainWindow::startBtn_clicked);
-
 }
 
 MainWindow::~MainWindow()
@@ -127,11 +130,12 @@ void MainWindow::handleCardClick()
     //per card chosen or per pair chosen
     players[currPlayerIndex].incrementMoves();
 
-    // Collect all selected items
+    // Collect the selected item on the scene
     foreach (QGraphicsItem* item, scene->selectedItems()) {
-        Card* pixmapItem = dynamic_cast<Card*>(item);
-        if (pixmapItem) {
-            selectedItems.append(pixmapItem);
+        Card* card = dynamic_cast<Card*>(item);
+        if (card) {
+            selectedItems.append(card);
+            card->toggle();
         }
     }
 
@@ -154,21 +158,14 @@ void MainWindow::handleCardClick()
             players[currPlayerIndex].incrementMatchedPairs();
 
             // Remove the matching pair from the scene
-            scene->removeItem(firstCard);
-            scene->removeItem(secondCard);
+            QTimer::singleShot(500,this, [=]() { scene->removeItem(firstCard); });
+            QTimer::singleShot(500,this,[=]() { scene->removeItem(secondCard); });
 
         } else {
            //qDebug() << "Non-matching cards!";
-
-            // Close the cards, after a delay?
-            for (QGraphicsItem* item : selectedItems) {
-                Card* card = dynamic_cast<Card*>(item);
-                if (card) {
-                    card->toggle(); //toggling cards
-                }
-            }
+            QTimer::singleShot(500,this, [=]() { firstCard->toggle(); });
+            QTimer::singleShot(500, this, [=]() { secondCard->toggle(); });
         }
-
         selectedItems.clear();
     }
 
@@ -182,6 +179,8 @@ void MainWindow::handleCardClick()
 }
 
 void MainWindow::populateSceneWithCards() {
+
+    scene->clear();
 
     QVector<CardPrototypeFactory::CardType> cardTypes = {
          CardPrototypeFactory::boy,
@@ -200,14 +199,14 @@ void MainWindow::populateSceneWithCards() {
         };
 
     // Resize the card types vector to contain half the number of cards
-    cardTypes.resize(36 / 2);
+    cardTypes.resize((numberOfCards*numberOfCards) / 2);
 
     // Duplicate the card types to ensure each card has a pair
     cardTypes += cardTypes;
 
     // Populate the scene with cards
-    for (int i = 0; i < 6; ++i) {
-        for (int j = 0; j < 6; ++j) {
+    for (int i = 0; i < numberOfCards; ++i) {
+        for (int j = 0; j < numberOfCards; ++j) {
             if (!cardTypes.isEmpty()) {
                 int randomIndex = QRandomGenerator::global()->bounded(cardTypes.size());
 
@@ -221,9 +220,8 @@ void MainWindow::populateSceneWithCards() {
                 if (newCard) {
                     // Set up the card's position and properties
                     newCard->setPos(i * 120, j * 110);
-                    newCard->setFlag(QGraphicsItem::ItemIsSelectable);
+                    newCard->setFlag(QGraphicsItem::ItemIsSelectable, true);
                     newCard->setScale(0.2);
-                    newCard->setZValue(0);
 
                     // Add the card to the scene
                     scene->addItem(newCard);
@@ -236,17 +234,19 @@ void MainWindow::populateSceneWithCards() {
             }
         }
     }
+
+
     Card* glancerCard = CardPrototypeFactory::createPrototype(CardPrototypeFactory::glancer);
     glancerCard->setScale(0.2);
     glancerCard->setPos(0 * 120, 0 * 110);
+    glancerCard->setFlag(QGraphicsItem::ItemIsSelectable);
     boosterScene->addItem(glancerCard);
-
 
     Card* doubleCard = CardPrototypeFactory::createPrototype(CardPrototypeFactory::doublePoint);
     doubleCard->setScale(0.2);
-    glancerCard->setPos(1 * 120, 0 * 110);
+    doubleCard->setPos(1 * 120, 0 * 110);
+    doubleCard->setFlag(QGraphicsItem::ItemIsSelectable);
     boosterScene->addItem(doubleCard);
-
 }
 
 void MainWindow::on_startGameBtn_clicked(){
@@ -287,12 +287,15 @@ void MainWindow::updateCountdown(){
         ui->timeUp->setVisible(true);
         //We can add something here so that the player cannot interact/click
         //cards after their turn ends. AKA when the timer runs out
+        disableAllCards();
     }
 }
 
 void MainWindow::on_startTurnBtn_clicked(){
     ui->timeUp->setVisible(false);
     qDebug() << "Start turn button clicked";
+
+    populateSceneWithCards();
 
     ui->gameStatusDisplay->setText(players[currPlayerIndex].getName());
     qDebug() << "Player " << players[currPlayerIndex].getName() << "'s turn";
@@ -359,6 +362,24 @@ void MainWindow::on_pushButton_clicked()
         }
     }
 
-    selectedItems.clear();
+    items.clear();
 }
 
+void MainWindow::disableAllCards(){
+
+    QList<QGraphicsItem*> items = scene->items();
+    for (QGraphicsItem* item : items) {
+        if (!item->isSelected()) {
+            item->setSelected(true);
+        }
+    }
+
+    for (QGraphicsItem* item : items) {
+        Card* card = dynamic_cast<Card*>(item);
+        if (card) {
+            card->setFlag(QGraphicsItem::ItemIsSelectable, false);
+            card->setEnabled(false);
+        }
+    }
+    items.clear();
+}

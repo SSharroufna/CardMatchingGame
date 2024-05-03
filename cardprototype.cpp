@@ -33,10 +33,12 @@ Card* CardPrototypeFactory::createPrototype(CardType type) {
     case extraTime:
         return new Card(QPixmap("/Users/sarah/Downloads/images/card1.png"), QPixmap("/Users/sarah/Downloads/images/back.png"));
     case doublePoint:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/double.png"), QPixmap("/Users/sarah/Downloads/images/double.png"));
+        return new DoublePointCard(QPixmap("/Users/sarah/Downloads/images/double.png"), QPixmap("/Users/sarah/Downloads/images/double.png"));
     case glancer:
-        return new Card(QPixmap("/Users/sarah/Downloads/images/glancer.png"), QPixmap("/Users/sarah/Downloads/images/glancer.png"));
+        return new GlancerCard(QPixmap("/Users/sarah/Downloads/images/glancer.png"), QPixmap("/Users/sarah/Downloads/images/glancer.png"));
     default:
         return nullptr;
     }
 }
+
+
