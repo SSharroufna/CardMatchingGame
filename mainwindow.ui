@@ -27,8 +27,8 @@
    <widget class="QPushButton" name="startGameBtn">
     <property name="geometry">
      <rect>
-      <x>129</x>
-      <y>500</y>
+      <x>139</x>
+      <y>555</y>
       <width>91</width>
       <height>32</height>
      </rect>
@@ -40,8 +40,8 @@
    <widget class="QPushButton" name="newGameBtn">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>500</y>
+      <x>30</x>
+      <y>555</y>
       <width>91</width>
       <height>32</height>
      </rect>
@@ -53,8 +53,8 @@
    <widget class="QLabel" name="timerLabel">
     <property name="geometry">
      <rect>
-      <x>1130</x>
-      <y>110</y>
+      <x>1140</x>
+      <y>150</y>
       <width>101</width>
       <height>51</height>
      </rect>
@@ -73,8 +73,8 @@
    <widget class="QPushButton" name="quitGameBtn">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>530</y>
+      <x>30</x>
+      <y>585</y>
       <width>201</width>
       <height>32</height>
      </rect>
@@ -86,8 +86,8 @@
    <widget class="QLCDNumber" name="timerDisplay">
     <property name="geometry">
      <rect>
-      <x>1240</x>
-      <y>110</y>
+      <x>1250</x>
+      <y>150</y>
       <width>101</width>
       <height>51</height>
      </rect>
@@ -97,7 +97,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>20</y>
+      <y>40</y>
       <width>201</width>
       <height>80</height>
      </rect>
@@ -149,7 +149,7 @@
     <property name="geometry">
      <rect>
       <x>1150</x>
-      <y>480</y>
+      <y>490</y>
       <width>191</width>
       <height>80</height>
      </rect>
@@ -194,8 +194,8 @@
    <widget class="QGroupBox" name="playerBox">
     <property name="geometry">
      <rect>
-      <x>1140</x>
-      <y>20</y>
+      <x>1150</x>
+      <y>45</y>
       <width>191</width>
       <height>80</height>
      </rect>
@@ -240,8 +240,8 @@
    <widget class="QGroupBox" name="scoreboardBox">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>280</y>
+      <x>30</x>
+      <y>335</y>
       <width>201</width>
       <height>181</height>
      </rect>
@@ -279,7 +279,7 @@
    <widget class="QPushButton" name="startTurnBtn">
     <property name="geometry">
      <rect>
-      <x>1120</x>
+      <x>1151</x>
       <y>655</y>
       <width>191</width>
       <height>32</height>
@@ -292,7 +292,7 @@
    <widget class="QPushButton" name="boosterBtn">
     <property name="geometry">
      <rect>
-      <x>1159</x>
+      <x>1190</x>
       <y>605</y>
       <width>111</width>
       <height>32</height>
@@ -305,8 +305,8 @@
    <widget class="QLabel" name="timeUp">
     <property name="geometry">
      <rect>
-      <x>1150</x>
-      <y>170</y>
+      <x>1160</x>
+      <y>220</y>
       <width>171</width>
       <height>31</height>
      </rect>
@@ -329,10 +329,10 @@
    <widget class="QGroupBox" name="matchesBox">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>190</y>
-      <width>191</width>
-      <height>80</height>
+      <x>30</x>
+      <y>225</y>
+      <width>201</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="font">
@@ -352,8 +352,8 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>35</y>
-       <width>191</width>
+       <y>40</y>
+       <width>201</width>
        <height>42</height>
       </rect>
      </property>
@@ -376,8 +376,8 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>100</y>
-      <width>191</width>
+      <y>130</y>
+      <width>201</width>
       <height>80</height>
      </rect>
     </property>
@@ -398,8 +398,8 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>30</y>
-       <width>191</width>
+       <y>40</y>
+       <width>201</width>
        <height>42</height>
       </rect>
      </property>
@@ -433,7 +433,7 @@
      <rect>
       <x>1170</x>
       <y>270</y>
-      <width>141</width>
+      <width>151</width>
       <height>51</height>
      </rect>
     </property>
@@ -447,6 +447,9 @@
     <property name="text">
      <string>Booster</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -455,7 +458,7 @@
      <x>0</x>
      <y>0</y>
      <width>1407</width>
-     <height>37</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
