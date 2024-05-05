@@ -14,6 +14,7 @@
 #include <QDebug>
 #include "cardprototype.h"
 #include "difficultydialog.h"
+#include "cardPrototype.h"
 #include <QTimer>
 #include <QLCDNumber>
 
@@ -49,6 +50,9 @@ private slots:
     void on_glancerCardDoubleClicked();
 
 private:
+    //Instances
+    CardPrototypeFactory factory;
+
     //Scenes
     CardPrototypeFactory cardFactory;
     QGraphicsScene *scene;

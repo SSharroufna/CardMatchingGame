@@ -126,7 +126,8 @@ public:
         glancer,
     };
 
-    static Card* createPrototype(CardType type);
+    Card* createPrototype(CardType type);
+
 };
 
 #endif // CARDPROTOTYPE_HPP

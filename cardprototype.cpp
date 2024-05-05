@@ -42,3 +42,4 @@ Card* CardPrototypeFactory::createPrototype(CardType type) {
 }
 
 
+

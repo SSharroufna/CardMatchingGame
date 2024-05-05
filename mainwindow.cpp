@@ -266,7 +266,8 @@ void MainWindow::populateSceneWithCards() {
                 int randomIndex = QRandomGenerator::global()->bounded(cardTypes.size());
 
                 // Use the prototype factory to create a new card prototype object
-               Card* cardPrototype = CardPrototypeFactory::createPrototype(cardTypes[randomIndex]);
+                Card* cardPrototype = factory.createPrototype(cardTypes[randomIndex]);
+
 
                 // Cast the prototype to Card
                 Card* newCard = dynamic_cast<Card*>(cardPrototype);
@@ -290,19 +291,19 @@ void MainWindow::populateSceneWithCards() {
         }
     }
 
-    Card* glancerCard = CardPrototypeFactory::createPrototype(CardPrototypeFactory::glancer);
+    Card* glancerCard = factory.createPrototype(CardPrototypeFactory::glancer);
     glancerCard->setScale(0.15);
     glancerCard->setPos(0 * 120, 0 * 110);
     glancerCard->setFlag(QGraphicsItem::ItemIsSelectable);
     boosterScene->addItem(glancerCard);
 
-    Card* doubleCard = CardPrototypeFactory::createPrototype(CardPrototypeFactory::doublePoint);
+    Card* doubleCard = factory.createPrototype(CardPrototypeFactory::doublePoint);
     doubleCard->setScale(0.15);
     doubleCard->setPos(0.7 * 120, 0 * 110);
     doubleCard->setFlag(QGraphicsItem::ItemIsSelectable);
     boosterScene->addItem(doubleCard);
 
-    Card* extraTimeCard = CardPrototypeFactory::createPrototype(CardPrototypeFactory::extraTime);
+    Card* extraTimeCard = factory.createPrototype(CardPrototypeFactory::extraTime);
     extraTimeCard->setScale(0.15);
     extraTimeCard->setPos(1.4 * 120, 0 * 110);
     extraTimeCard->setFlag(QGraphicsItem::ItemIsSelectable);
