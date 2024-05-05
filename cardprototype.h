@@ -32,7 +32,7 @@ public:
         flipped_ = !flipped_;
     }
 
-    int points() const { return 5; }
+    virtual int points() { return 5; }
 
     const QPixmap& frontImage() const { return frontImage_; }
     const QPixmap& backImage() const { return backImage_; }
@@ -72,6 +72,9 @@ public:
         qDebug() << " DoublePointCard Double Clicked";
         emit doubleClicked();
     }
+
+    //DoublePointCard worth each 25, so the pair is 50.
+    int points() override { return 25; }
 
 };
 

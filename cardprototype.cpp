@@ -29,7 +29,7 @@ Card* CardPrototypeFactory::createPrototype(CardType type) {
     case closedBox:
         return new Card(QPixmap(":/images/card9.png"), QPixmap(":/images/back.png"));
     case gem:
-        return new Card(QPixmap(":/images/card8.png"), QPixmap(":/images/back.png"));
+        return new DoublePointCard(QPixmap(":/images/card8.png"), QPixmap(":/images/back.png"));
     case extraTime:
         return new ExtraTimeCard(QPixmap(":/images/time.png"), QPixmap(":/images/time.png"));
     case doublePoint:
