@@ -34,17 +34,19 @@ public:
 
 private slots:
     void handleCardClick();
+    void onSelectionChanged();
     void populateSceneWithCards();
 
     void on_startGameBtn_clicked();
     void on_startTurnBtn_clicked();
     void on_quitGameBtn_clicked();
 
-    void disableAllCards();
+    void disableAllCards(bool selectable);
     void updateScoreboard();
     void updateUserData();
 
     void on_timerCardDoubleClicked();
+    void on_glancerCardDoubleClicked();
 
 private:
     //Scenes

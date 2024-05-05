@@ -42,7 +42,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     //Display game difficulty in MainWindow
     //Changes color based on selected difficulty
-    //so it's easy to distinguish
     gameDifficulty = diffDialog.getDifficulty();
 
     switch (gameDifficulty){
@@ -106,7 +105,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     //Connect signals and slots
     connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
-    // connect(ui->startGameBtn, &QAbstractButton::pressed, this, &MainWindow::startBtn_clicked);
+    connect(boosterScene, &QGraphicsScene::selectionChanged, this, &MainWindow::onSelectionChanged);
+
+    //connect(ui->startGameBtn, &QAbstractButton::pressed, this, &MainWindow::startBtn_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -114,43 +115,67 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// Slot implementation in MainWindow
+//Takes the signal land add 10 seconds to the timer.
 void MainWindow::on_timerCardDoubleClicked() {
     qDebug() << "Extra time card double clicked";
-    // Add 10 seconds to the countdown timer
-    countdownValue += 10;
-    // Update the countdown display if necessary
+
+    countdownValue += 15;
     lcdNumber->display(countdownValue);
 }
 
-void MainWindow::updateScoreboard(){
+void MainWindow::on_glancerCardDoubleClicked() {
+    qDebug() << "Glancer card double clicked";
 
-    for (int i = 0; i < players.size(); i++){
-        ui->scoreboardTable->setItem(i, 0, new QTableWidgetItem(players[i].getName()));
-        ui->scoreboardTable->setItem(i, 1, new QTableWidgetItem(players[i].getScore()));
+    countdownValue += 4;
+    disableAllCards(false);
+
+    QList<Card*> cards;
+    for (QGraphicsItem* item : scene->items()) {
+        Card* card = dynamic_cast<Card*>(item);
+        if (card) {
+            card->toggle();
+            cards.append(card);
+            scene->update();
+        }
     }
 
-    //Sorts the table and puts the person with the highest score at the top
-    Qt::SortOrder order = Qt::DescendingOrder;
-    ui->scoreboardTable->sortItems(1, order);
-    ui->scoreboardTable->resizeColumnToContents(1);
+    QTimer::singleShot(4000, this, [=]() {
+        for (Card* card : cards) {
+            card->toggle();
+            scene->update();
+        }
+    });
+
+     disableAllCards(true);
+
 }
 
-void MainWindow::updateUserData(){
-    //set matched pair
-    players[currPlayerIndex].setMatchedPair(players[currPlayerIndex].getMatchedPairs());
-    QString strPair = QString::number(players[currPlayerIndex].getMatchedPairs());
-    ui->matchesLabel->setText(strPair);
 
-    //set moves
-     players[currPlayerIndex].setMoves(players[currPlayerIndex].getMoves());
-    QString strMoves = QString::number(players[currPlayerIndex].getMoves()/2);
-    ui->moves_label->setText(strMoves);
+void MainWindow::onSelectionChanged() {
+    // Get the list of selected items in the scene
+    QList<QGraphicsItem*> selectedItems = boosterScene->selectedItems();
 
-     //set score
-     players[currPlayerIndex].setScore(players[currPlayerIndex].getScore());
-    QString strScore = QString::number(players[currPlayerIndex].getScore());
-    ui->score_label->setText(strScore);
+    for (QGraphicsItem* item : selectedItems) {
+
+        Card* boosterCard = qgraphicsitem_cast<Card*>(item);
+
+        if (boosterCard) {
+
+            if (dynamic_cast<ExtraTimeCard*>(boosterCard)) {
+                qDebug() << "Extra Time booster card selected";
+                on_timerCardDoubleClicked();
+
+            } else if (dynamic_cast<DoublePointCard*>(boosterCard)) {
+                qDebug() << "Double Point booster card selected";
+
+            } else if (dynamic_cast<GlancerCard*>(boosterCard)) {
+                qDebug() << "Glancer booster card selected";
+                on_glancerCardDoubleClicked();
+                connect(countdownTimer, &QTimer::timeout, this, &MainWindow::updateCountdown);
+            }
+        }
+        boosterScene->removeItem(boosterCard);
+    }
 }
 
 void MainWindow::handleCardClick()
@@ -166,6 +191,7 @@ void MainWindow::handleCardClick()
         if (card) {
             selectedItems.append(card);
             card->toggle();
+
         }
     }
 
@@ -281,6 +307,7 @@ void MainWindow::populateSceneWithCards() {
     extraTimeCard->setPos(1.4 * 120, 0 * 110);
     extraTimeCard->setFlag(QGraphicsItem::ItemIsSelectable);
     boosterScene->addItem(extraTimeCard);
+    //connect(extraTimeCard, &Card::doubleClicked, this, &MainWindow::on_timerCardDoubleClicked);
 }
 
 void MainWindow::on_startGameBtn_clicked(){
@@ -321,7 +348,7 @@ void MainWindow::updateCountdown(){
         ui->timeUp->setVisible(true);
         //We can add something here so that the player cannot interact/click
         //cards after their turn ends. AKA when the timer runs out
-        disableAllCards();
+        disableAllCards(false);
     }
 }
 
@@ -345,6 +372,51 @@ void MainWindow::on_startTurnBtn_clicked(){
 void MainWindow::on_quitGameBtn_clicked()
 {
     qDebug() << "Quit Button Clicked";
+}
+
+void MainWindow::disableAllCards(bool selectable){
+
+    QList<QGraphicsItem*> items = scene->items();
+    for (QGraphicsItem* item : items) {
+        Card* card = dynamic_cast<Card*>(item);
+        if (card) {
+            card->setEnabled(selectable);
+            card->setFlag(QGraphicsItem::ItemIsSelectable, selectable);
+        }
+    }
+    items.clear();
+    selectedItems.clear();
+
+}
+
+void MainWindow::updateScoreboard(){
+
+    for (int i = 0; i < players.size(); i++){
+        ui->scoreboardTable->setItem(i, 0, new QTableWidgetItem(players[i].getName()));
+        ui->scoreboardTable->setItem(i, 1, new QTableWidgetItem(players[i].getScore()));
+    }
+
+    //Sorts the table and puts the person with the highest score at the top
+    Qt::SortOrder order = Qt::DescendingOrder;
+    ui->scoreboardTable->sortItems(1, order);
+    ui->scoreboardTable->resizeColumnToContents(1);
+}
+
+void MainWindow::updateUserData(){
+    //set matched pair
+    players[currPlayerIndex].setMatchedPair(players[currPlayerIndex].getMatchedPairs());
+    QString strPair = QString::number(players[currPlayerIndex].getMatchedPairs());
+    ui->matchesLabel->setText(strPair);
+
+    //set moves
+    players[currPlayerIndex].setMoves(players[currPlayerIndex].getMoves());
+    QString strMoves = QString::number(players[currPlayerIndex].getMoves()/2);
+    ui->moves_label->setText(strMoves);
+
+    //set score
+    players[currPlayerIndex].setScore(players[currPlayerIndex].getScore());
+    QString strScore = QString::number(players[currPlayerIndex].getScore());
+    ui->score_label->setText(strScore);
 }
 
 QString MainWindow::cardTypeToString(CardPrototypeFactory::CardType cardType) const {
@@ -376,24 +448,4 @@ QString MainWindow::cardTypeToString(CardPrototypeFactory::CardType cardType) co
     default:
         return "Unknown";
     }
-}
-
-void MainWindow::disableAllCards(){
-
-    QList<QGraphicsItem*> items = scene->items();
-    for (QGraphicsItem* item : items) {
-        if (!item->isSelected()) {
-            item->setSelected(true);
-        }
-    }
-
-    for (QGraphicsItem* item : items) {
-        Card* card = dynamic_cast<Card*>(item);
-        if (card) {
-            card->setFlag(QGraphicsItem::ItemIsSelectable, false);
-            card->setEnabled(false);
-        }
-    }
-    items.clear();
-    selectedItems.clear();
 }

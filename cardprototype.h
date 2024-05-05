@@ -7,6 +7,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 class CardPrototype : public QWidget {
+
 public:
     CardPrototype(QWidget *parent = nullptr) : QWidget(parent) {}
     virtual ~CardPrototype() {}
@@ -15,11 +16,13 @@ public:
     virtual const QPixmap& image() const = 0;
 };
 
-// Regular Cards
+//Regular Cards
 class Card : public QGraphicsPixmapItem {
 public:
     Card(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
-        : QGraphicsPixmapItem(backImage, parent), frontImage_(frontImage), backImage_(backImage), flipped_(false) {}
+        : QGraphicsPixmapItem(backImage, parent), frontImage_(frontImage), backImage_(backImage), flipped_(false) {
+
+    }
 
     const QPixmap& image() const  {
         return flipped_ ? backImage_ : frontImage_;
@@ -48,6 +51,7 @@ public:
     const QPixmap& frontImage() const { return frontImage_; }
     const QPixmap& backImage() const { return backImage_; }
 
+
 private:
     QPixmap frontImage_;
     QPixmap backImage_;
@@ -66,14 +70,15 @@ public:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override {
         qDebug() << "GlancerCard Activated";
     }
-
 };
 
 // Special booster card "Double Point"
 class DoublePointCard : public Card {
 public:
     DoublePointCard(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
-        : Card(frontImage, backImage, parent) {}
+        : Card(frontImage, backImage, parent) {
+
+    }
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override  {
         qDebug() << "DoublePointCard double clicked";
@@ -97,15 +102,6 @@ public:
     ExtraTimeCard(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
         : Card(frontImage, backImage, parent) {}
 
-signals:
-    void doubleClicked();
-
-protected:
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override {
-        qDebug() << "ExtraTimeCard double clicked";
-        // Emit the signal indicating the extra time card has been double-clicked
-        emit doubleClicked();
-    }
 };
 
 // Card factory class for creating prototype objects
