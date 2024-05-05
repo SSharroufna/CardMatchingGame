@@ -9,8 +9,6 @@
 #include <QRandomGenerator>
 #include <QTime>
 #include <QTimer>
-#include <algorithm> // Include for std::shuffle
-#include <random>    // Include for std::mt19937
 #include <QTableWidgetItem>
 #include <QtWidgets>
 
@@ -105,9 +103,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //Connect signals and slots
     connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
-    connect(boosterScene, &QGraphicsScene::selectionChanged, this, &MainWindow::onSelectionChanged);
-
-    //connect(ui->startGameBtn, &QAbstractButton::pressed, this, &MainWindow::startBtn_clicked);
+    //connect(boosterScene, &QGraphicsScene::selectionChanged, this, &MainWindow::onSelectionChanged);
 }
 
 MainWindow::~MainWindow()
@@ -150,32 +146,8 @@ void MainWindow::on_glancerCardDoubleClicked() {
 
 }
 
-
-void MainWindow::onSelectionChanged() {
-    // Get the list of selected items in the scene
-    QList<QGraphicsItem*> selectedItems = boosterScene->selectedItems();
-
-    for (QGraphicsItem* item : selectedItems) {
-
-        Card* boosterCard = qgraphicsitem_cast<Card*>(item);
-
-        if (boosterCard) {
-
-            if (dynamic_cast<ExtraTimeCard*>(boosterCard)) {
-                qDebug() << "Extra Time booster card selected";
-                on_timerCardDoubleClicked();
-
-            } else if (dynamic_cast<DoublePointCard*>(boosterCard)) {
-                qDebug() << "Double Point booster card selected";
-
-            } else if (dynamic_cast<GlancerCard*>(boosterCard)) {
-                qDebug() << "Glancer booster card selected";
-                on_glancerCardDoubleClicked();
-                connect(countdownTimer, &QTimer::timeout, this, &MainWindow::updateCountdown);
-            }
-        }
-        boosterScene->removeItem(boosterCard);
-    }
+bool MainWindow::on_doubleCardDoubleClicked() {
+    return true;
 }
 
 void MainWindow::handleCardClick()
@@ -211,10 +183,13 @@ void MainWindow::handleCardClick()
         // Check if the cards are different and have the same type
         if (firstCard != secondCard && firstCardType == secondCardType) {
             qDebug() << "Matching cards!";
-            firstCard->setPoints(firstCard->points());
-            qDebug() << "firstCard point " << firstCard->points();
+
             players[currPlayerIndex].incrementMatchedPairs();
-            players[currPlayerIndex].increaseScore(firstCard->points() *2);
+
+            if (on_doubleCardDoubleClicked()){
+                players[currPlayerIndex].increaseScore((firstCard->points() + secondCard->points())*2);
+            }
+            players[currPlayerIndex].increaseScore(firstCard->points() + secondCard->points());
             updateUserData();
 
             // Remove the matching pair from the scene
@@ -268,20 +243,16 @@ void MainWindow::populateSceneWithCards() {
                 // Use the prototype factory to create a new card prototype object
                 Card* cardPrototype = factory.createPrototype(cardTypes[randomIndex]);
 
-
                 // Cast the prototype to Card
                 Card* newCard = dynamic_cast<Card*>(cardPrototype);
 
-                // Check if the cast was successful
                 if (newCard) {
                     // Set up the card's position and properties
                     newCard->setPos(i * 120, j * 110);
                     newCard->setFlag(QGraphicsItem::ItemIsSelectable, true);
                     newCard->setScale(0.2);
 
-                    // Add the card to the scene
                     scene->addItem(newCard);
-                    // Store the card type for each card item
                     cardTypesMap.insert(newCard, cardTypes[randomIndex]);
                 }
 
@@ -308,7 +279,10 @@ void MainWindow::populateSceneWithCards() {
     extraTimeCard->setPos(1.4 * 120, 0 * 110);
     extraTimeCard->setFlag(QGraphicsItem::ItemIsSelectable);
     boosterScene->addItem(extraTimeCard);
-    //connect(extraTimeCard, &Card::doubleClicked, this, &MainWindow::on_timerCardDoubleClicked);
+
+    connect(glancerCard, &Card::doubleClicked, this, &MainWindow::on_glancerCardDoubleClicked);
+    connect(extraTimeCard, &Card::doubleClicked, this, &MainWindow::on_timerCardDoubleClicked);
+    connect(doubleCard, &Card::doubleClicked, this, &MainWindow::on_doubleCardDoubleClicked);
 }
 
 void MainWindow::on_startGameBtn_clicked(){

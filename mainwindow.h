@@ -35,7 +35,6 @@ public:
 
 private slots:
     void handleCardClick();
-    void onSelectionChanged();
     void populateSceneWithCards();
 
     void on_startGameBtn_clicked();
@@ -48,6 +47,7 @@ private slots:
 
     void on_timerCardDoubleClicked();
     void on_glancerCardDoubleClicked();
+    bool on_doubleCardDoubleClicked();
 
 private:
     //Instances
