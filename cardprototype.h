@@ -13,7 +13,6 @@ class Card :  public QObject, public QGraphicsPixmapItem{
 public:
     Card(const QPixmap& frontImage, const QPixmap& backImage, QGraphicsItem* parent = nullptr)
         : QGraphicsPixmapItem(backImage, parent), frontImage_(frontImage), backImage_(backImage), flipped_(false) {
-
     }
 
     const QPixmap& image() const  {
@@ -58,9 +57,8 @@ public:
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override {
         qDebug() << " GlancerCard Double Clicked";
-        doubleClicked();
+        emit doubleClicked();
     }
-
 };
 
 // Special booster card "Double Point"
@@ -72,7 +70,7 @@ public:
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override {
         qDebug() << " DoublePointCard Double Clicked";
-        doubleClicked();
+        emit doubleClicked();
     }
 
 };
@@ -85,7 +83,7 @@ public:
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override {
         qDebug() << " ExtraTimeCard Double Clicked";
-        doubleClicked();
+        emit doubleClicked();
     }
 };
 

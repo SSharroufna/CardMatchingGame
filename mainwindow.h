@@ -47,7 +47,7 @@ private slots:
 
     void on_timerCardDoubleClicked();
     void on_glancerCardDoubleClicked();
-    bool on_doubleCardDoubleClicked();
+    void on_doubleCardDoubleClicked();
 
 private:
     //Instances
@@ -70,6 +70,11 @@ private:
     QTimer *countdownTimer;
     QLCDNumber *lcdNumber;
     int countdownValue = 10;
+
+    //Booster Cards
+    Card* doubleCard;
+    Card* glancerCard;
+    Card* extraTimeCard;
 
     // a map to associate each card item with its card type
     QMap<QGraphicsPixmapItem*, CardPrototypeFactory::CardType> cardTypesMap;

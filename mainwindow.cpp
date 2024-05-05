@@ -103,7 +103,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     //Connect signals and slots
     connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleCardClick);
-    //connect(boosterScene, &QGraphicsScene::selectionChanged, this, &MainWindow::onSelectionChanged);
 }
 
 MainWindow::~MainWindow()
@@ -112,44 +111,6 @@ MainWindow::~MainWindow()
 }
 
 //Takes the signal land add 10 seconds to the timer.
-void MainWindow::on_timerCardDoubleClicked() {
-    qDebug() << "Extra time card double clicked";
-
-    countdownValue += 15;
-    lcdNumber->display(countdownValue);
-}
-
-void MainWindow::on_glancerCardDoubleClicked() {
-    qDebug() << "Glancer card double clicked";
-
-    countdownValue += 4;
-    disableAllCards(false);
-
-    QList<Card*> cards;
-    for (QGraphicsItem* item : scene->items()) {
-        Card* card = dynamic_cast<Card*>(item);
-        if (card) {
-            card->toggle();
-            cards.append(card);
-            scene->update();
-        }
-    }
-
-    QTimer::singleShot(4000, this, [=]() {
-        for (Card* card : cards) {
-            card->toggle();
-            card->setFlag(QGraphicsItem::ItemIsSelectable, true);
-            card->setEnabled(true);
-            scene->update();
-        }
-    });
-
-}
-
-bool MainWindow::on_doubleCardDoubleClicked() {
-    return true;
-}
-
 void MainWindow::handleCardClick()
 {
     qDebug() << "Card clicked!";
@@ -186,10 +147,12 @@ void MainWindow::handleCardClick()
 
             players[currPlayerIndex].incrementMatchedPairs();
 
-            if (on_doubleCardDoubleClicked()){
+            if (!doubleCard->isActive()){
                 players[currPlayerIndex].increaseScore((firstCard->points() + secondCard->points())*2);
+            } else {
+                 players[currPlayerIndex].increaseScore(firstCard->points() + secondCard->points());
             }
-            players[currPlayerIndex].increaseScore(firstCard->points() + secondCard->points());
+
             updateUserData();
 
             // Remove the matching pair from the scene
@@ -262,19 +225,19 @@ void MainWindow::populateSceneWithCards() {
         }
     }
 
-    Card* glancerCard = factory.createPrototype(CardPrototypeFactory::glancer);
+    glancerCard = factory.createPrototype(CardPrototypeFactory::glancer);
     glancerCard->setScale(0.15);
     glancerCard->setPos(0 * 120, 0 * 110);
     glancerCard->setFlag(QGraphicsItem::ItemIsSelectable);
     boosterScene->addItem(glancerCard);
 
-    Card* doubleCard = factory.createPrototype(CardPrototypeFactory::doublePoint);
+    doubleCard = factory.createPrototype(CardPrototypeFactory::doublePoint);
     doubleCard->setScale(0.15);
     doubleCard->setPos(0.7 * 120, 0 * 110);
     doubleCard->setFlag(QGraphicsItem::ItemIsSelectable);
     boosterScene->addItem(doubleCard);
 
-    Card* extraTimeCard = factory.createPrototype(CardPrototypeFactory::extraTime);
+    extraTimeCard = factory.createPrototype(CardPrototypeFactory::extraTime);
     extraTimeCard->setScale(0.15);
     extraTimeCard->setPos(1.4 * 120, 0 * 110);
     extraTimeCard->setFlag(QGraphicsItem::ItemIsSelectable);
@@ -284,6 +247,45 @@ void MainWindow::populateSceneWithCards() {
     connect(extraTimeCard, &Card::doubleClicked, this, &MainWindow::on_timerCardDoubleClicked);
     connect(doubleCard, &Card::doubleClicked, this, &MainWindow::on_doubleCardDoubleClicked);
 }
+
+void MainWindow::on_timerCardDoubleClicked() {
+     boosterScene->removeItem(extraTimeCard);
+
+    countdownValue += 15;
+    lcdNumber->display(countdownValue);
+}
+
+void MainWindow::on_glancerCardDoubleClicked() {
+     boosterScene->removeItem(glancerCard);
+
+    countdownValue += 4;
+    disableAllCards(false);
+
+    QList<Card*> cards;
+    for (QGraphicsItem* item : scene->items()) {
+        Card* card = dynamic_cast<Card*>(item);
+        if (card) {
+            card->toggle();
+            cards.append(card);
+            scene->update();
+        }
+    }
+
+    QTimer::singleShot(4000, this, [=]() {
+        for (Card* card : cards) {
+            card->toggle();
+            card->setFlag(QGraphicsItem::ItemIsSelectable, true);
+            card->setEnabled(true);
+            scene->update();
+        }
+    });
+
+}
+
+void MainWindow::on_doubleCardDoubleClicked() {
+    boosterScene->removeItem(doubleCard);
+}
+
 
 void MainWindow::on_startGameBtn_clicked(){
     ui->timeUp->setVisible(false);
@@ -330,6 +332,8 @@ void MainWindow::updateCountdown(){
 void MainWindow::on_startTurnBtn_clicked(){
     ui->timeUp->setVisible(false);
     qDebug() << "Start turn button clicked";
+    QObject *senderObject = sender();
+    senderObject->disconnect();
 
     populateSceneWithCards();
 
