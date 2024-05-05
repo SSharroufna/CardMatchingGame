@@ -142,11 +142,11 @@ void MainWindow::on_glancerCardDoubleClicked() {
     QTimer::singleShot(4000, this, [=]() {
         for (Card* card : cards) {
             card->toggle();
+            card->setFlag(QGraphicsItem::ItemIsSelectable, true);
+            card->setEnabled(true);
             scene->update();
         }
     });
-
-     disableAllCards(true);
 
 }
 
@@ -346,8 +346,8 @@ void MainWindow::updateCountdown(){
         delete countdownTimer;
 
         ui->timeUp->setVisible(true);
-        //We can add something here so that the player cannot interact/click
-        //cards after their turn ends. AKA when the timer runs out
+
+        //When the timer runs out
         disableAllCards(false);
     }
 }
@@ -380,8 +380,12 @@ void MainWindow::disableAllCards(bool selectable){
     for (QGraphicsItem* item : items) {
         Card* card = dynamic_cast<Card*>(item);
         if (card) {
-            card->setEnabled(selectable);
-            card->setFlag(QGraphicsItem::ItemIsSelectable, selectable);
+            card->setSelected(false);
+            if (!card->isFlipped()) {
+                card->setFlag(QGraphicsItem::ItemIsSelectable, selectable);
+                card->setEnabled(selectable);
+            }
+
         }
     }
     items.clear();
