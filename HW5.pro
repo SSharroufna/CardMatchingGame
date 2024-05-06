@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     cardprototype.cpp \
     difficultydialog.cpp \
+    gameresult.cpp \
     main.cpp \
     mainwindow.cpp \
     numplayersdialog.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
     cardprototype.h \
     difficultydialog.h \
+    gameresult.h \
     mainwindow.h \
     numplayersdialog.h \
     player.h \
@@ -27,6 +29,7 @@ HEADERS += \
 
 FORMS += \
     difficultydialog.ui \
+    gameresult.ui \
     mainwindow.ui \
     numplayersdialog.ui \
     playernamesdialog.ui

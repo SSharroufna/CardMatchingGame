@@ -44,6 +44,7 @@ private slots:
     void disableAllCards(bool selectable);
     void updateScoreboard();
     void updateUserData();
+    void endGame();
 
     void on_timerCardDoubleClicked();
     void on_glancerCardDoubleClicked();
@@ -61,6 +62,7 @@ private:
     //Games setting
     int gameDifficulty;
     int numberOfCards;
+    int totalTurnsTaken = 0;
 
     //Initializing players
     QVector<Player> players;

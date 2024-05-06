@@ -326,14 +326,16 @@ void MainWindow::updateCountdown(){
 
         //When the timer runs out
         disableAllCards(false);
+        totalTurnsTaken++;
+        if (totalTurnsTaken >= players.size() * 3) {
+            endGame(); // Call a function to end the game
+        }
     }
 }
 
 void MainWindow::on_startTurnBtn_clicked(){
     ui->timeUp->setVisible(false);
     qDebug() << "Start turn button clicked";
-    QObject *senderObject = sender();
-    senderObject->disconnect();
 
     populateSceneWithCards();
 
@@ -346,11 +348,15 @@ void MainWindow::on_startTurnBtn_clicked(){
     countdownTimer = new QTimer(this);
     connect(countdownTimer, &QTimer::timeout, this, &MainWindow::updateCountdown);
     countdownTimer->start(1000);
+
+    // QObject *senderObject = sender();
+    // senderObject->disconnect();
 }
 
 void MainWindow::on_quitGameBtn_clicked()
 {
     qDebug() << "Quit Button Clicked";
+    endGame();
 }
 
 void MainWindow::disableAllCards(bool selectable){
@@ -431,4 +437,9 @@ QString MainWindow::cardTypeToString(CardPrototypeFactory::CardType cardType) co
     default:
         return "Unknown";
     }
+}
+
+
+void MainWindow::endGame(){
+    close();
 }
