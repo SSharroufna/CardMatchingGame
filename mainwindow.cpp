@@ -3,6 +3,7 @@
 #include "numplayersdialog.h"
 #include "playernamesdialog.h"
 #include "difficultydialog.h"
+#include "gameresult.h"
 #include <QString>
 #include <QDebug>
 #include <QDir>
@@ -382,7 +383,7 @@ void MainWindow::updateScoreboard(){
 
     for (int i = 0; i < players.size(); i++){
         ui->scoreboardTable->setItem(i, 0, new QTableWidgetItem(players[i].getName()));
-        ui->scoreboardTable->setItem(i, 1, new QTableWidgetItem(players[i].getScore()));
+        ui->scoreboardTable->setItem(i, 1, new QTableWidgetItem(QString::number(players[i].getScore())));
     }
 
     //Sorts the table and puts the person with the highest score at the top
@@ -442,4 +443,6 @@ QString MainWindow::cardTypeToString(CardPrototypeFactory::CardType cardType) co
 
 void MainWindow::endGame(){
     close();
+    gameResult dialog(this, players);
+    dialog.exec();
 }
