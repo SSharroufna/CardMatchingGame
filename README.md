@@ -37,3 +37,10 @@ The project uses the Factory Design Pattern to handle the creation of various ca
 
 ### Screenshots
 
+<img width="752" alt="Screenshot 2024-08-16 at 8 42 05 PM" src="https://github.com/user-attachments/assets/c95355fb-86bc-4bd9-b03f-c49e22cbdc91">
+
+<img width="495" alt="Screenshot 2024-08-16 at 8 42 18 PM" src="https://github.com/user-attachments/assets/5387ac3b-f1b3-42c1-9f17-0db59060910e">
+
+<img width="462" alt="Screenshot 2024-08-16 at 8 42 29 PM" src="https://github.com/user-attachments/assets/d89e5ae0-1be3-416e-a5c0-5e2cd6827747">
+
+<img width="295" alt="Screenshot 2024-08-16 at 8 42 37 PM" src="https://github.com/user-attachments/assets/fca447b3-4c05-4cb1-b0d5-2f70d1723dc2">
